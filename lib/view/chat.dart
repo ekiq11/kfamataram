@@ -1,9 +1,10 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:kf_online/modals/data_api.dart';
 import 'package:kf_online/modals/user.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 class ChatPage extends StatefulWidget {
   User user;
@@ -17,6 +18,57 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   TextEditingController _ctrlMess = TextEditingController();
+  File _image;
+
+  Future getImage(ImageSource media) async {
+    var img = await ImagePicker.pickImage(source: media);
+    setState(() {
+      _image = img;
+    });
+  }
+
+  void myAlert() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            title: Text('Please choose media to select'),
+            content: Container(
+              height: MediaQuery.of(context).size.height / 6,
+              child: Column(
+                children: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      getImage(ImageSource.gallery);
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.image),
+                        Text('From Gallery'),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      getImage(ImageSource.camera);
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.camera),
+                        Text('From Camera'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,23 +223,39 @@ class _ChatPageState extends State<ChatPage> {
                                     hintText: "  Tulis Pesan  "),
                                 style: TextStyle(fontSize: 18.0)),
                           ),
-                          Container(
-                            child: IconButton(
-                                icon: Icon(
-                                  Icons.send,
-                                  color: Colors.teal[300],
-                                ),
-                                onPressed: () async {
-                                  String content = _ctrlMess.text.trim();
-                                  if (content.isNotEmpty) {
-                                    var res = await _sendMess(content);
-                                    print(res);
-                                    _ctrlMess.text = "";
-                                  } else {
-                                    print("empty");
-                                  }
-                                }),
-                          )
+                          Row(
+                            children: [
+                              Container(
+                                child: IconButton(
+                                    icon: Icon(
+                                      Icons.image,
+                                      color: Colors.teal[300],
+                                    ),
+                                    onPressed: () {
+                                      myAlert();
+                                    }),
+                              ),
+                              Container(
+                                child: IconButton(
+                                    icon: Icon(
+                                      Icons.send,
+                                      color: Colors.teal[300],
+                                    ),
+                                    onPressed: () async {
+                                      String content = _ctrlMess.text.trim();
+                                      String image = _ctrlMess.text.trim();
+                                      if (content.isNotEmpty) {
+                                        var res =
+                                            await _sendMess(content, image);
+                                        print(res);
+                                        _ctrlMess.text = "";
+                                      } else {
+                                        print("empty");
+                                      }
+                                    }),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     )
@@ -223,13 +291,14 @@ class _ChatPageState extends State<ChatPage> {
     return jsonx;
   }
 
-  _sendMess(String content) async {
+  _sendMess(String content, image) async {
     var res = await http.post(BaseUrl.sendMess, body: {
       'username': widget.user.username,
       'password': widget.user.password,
       'email': widget.user.email,
       'user_to': widget.userTo.username,
-      'content': content
+      'content': content,
+      'image': image,
     });
     return res.body;
   }

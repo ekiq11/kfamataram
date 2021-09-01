@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:kf_online/modals/map_json.dart';
-import 'package:kf_online/modals/map_services.dart';
+import 'package:kf_online/services/map_services.dart';
 import 'package:kf_online/view/history_chat.dart';
 
 import 'package:kf_online/view/user.dart';
@@ -13,7 +13,6 @@ class LokasiApotek extends StatefulWidget {
 }
 
 class _LokasiApotekState extends State<LokasiApotek> {
-  String catie = "Makanan Cepat Saji";
   List<Lokasi> _lokasi;
 
   @override
@@ -61,13 +60,13 @@ class _LokasiApotekState extends State<LokasiApotek> {
         body: Container(
           decoration: new BoxDecoration(
             image: new DecorationImage(
-              image: ExactAssetImage('assets/asset7.jpg'),
+              image: ExactAssetImage('assets/asset8.jpeg'),
               fit: BoxFit.fitWidth,
               alignment: new FractionalOffset(0.0, 0.0),
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(top: 180.0),
+            padding: const EdgeInsets.only(top: 220.0),
             child: ListView.builder(
               itemCount: _lokasi == null ? 0 : _lokasi.length,
               itemBuilder: (context, index) {

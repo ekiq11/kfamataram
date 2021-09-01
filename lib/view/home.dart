@@ -1,10 +1,7 @@
 import 'package:kf_online/view/botton_buttons.dart';
 import 'package:kf_online/view/explanation.dart';
-
 import 'package:flutter/material.dart';
-import 'package:kf_online/view/login.dart';
 import 'package:kf_online/view/profile.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 final List<ExplanationData> data = [

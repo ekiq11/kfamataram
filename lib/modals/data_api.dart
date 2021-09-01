@@ -18,5 +18,5 @@ class BaseUrl {
   static String lupaPassword =
       "https://wisatakuapps.com/kf_api/kfonline/api/lupa_pass.php";
   static String historyChat =
-      "https://wisatakuapps.com/kf_api/kfonline/api/get_history_chat.php";
+      "https://wisatakuapps.com/kf_api/kfonline/api/get_history_chat.php?user=";
 }

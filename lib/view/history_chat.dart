@@ -1,14 +1,11 @@
-import 'dart:convert';
+import 'package:kf_online/modals/history.dart';
 
-import 'package:kf_online/modals/data_api.dart';
-import 'package:kf_online/view/chat.dart';
-import 'package:kf_online/modals/commons.dart';
-import 'package:kf_online/modals/user.dart';
+import 'package:kf_online/services/chat_services.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:kf_online/view/lokasi.dart';
 import 'package:kf_online/view/profile.dart';
 import 'package:kf_online/view/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryChat extends StatefulWidget {
   @override
@@ -16,34 +13,118 @@ class HistoryChat extends StatefulWidget {
 }
 
 class _HistoryChatState extends State<HistoryChat> {
-  var user = [];
+  List<ChatUser> _historyChat;
+  final GlobalKey<RefreshIndicatorState> _onRefresh =
+      GlobalKey<RefreshIndicatorState>();
+  @override
+  void initState() {
+    super.initState();
+    String username = "";
 
+    _getPref() async {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      setState(() {
+        username = preferences.getString("username");
+        print(username);
+        ChatServices.getHistory(username).then((historyChat) {
+          setState(() {
+            _historyChat = historyChat;
+          });
+        });
+      });
+    }
+
+    setState(() {
+      _getPref();
+    });
+  }
+
+  String username = "";
+
+  Future<void> _refresh() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      username = preferences.getString("username");
+      print(username);
+      ChatServices.getHistory(username).then((historyChat) {
+        setState(() {
+          _historyChat = historyChat;
+        });
+      });
+    });
+  }
+
+  var user = [];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.white,
-            elevation: 0,
-            toolbarHeight: 80.0,
-            title: new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  'assets/asset4.png',
-                  fit: BoxFit.contain,
-                  height: 20,
-                ),
-                Container(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset(
-                      'assets/asset5.png',
-                      fit: BoxFit.contain,
-                      height: 30,
-                    ))
-              ],
-            )),
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          toolbarHeight: 100.0,
+          title: Column(
+            children: [
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.asset(
+                    'assets/asset4.png',
+                    fit: BoxFit.contain,
+                    height: 20,
+                  ),
+                  Container(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.asset(
+                        'assets/asset5.png',
+                        fit: BoxFit.contain,
+                        height: 30,
+                      ))
+                ],
+              ),
+              Column(
+                children: [
+                  Text("Percakapan", style: TextStyle(color: Colors.teal))
+                ],
+              )
+            ],
+          ),
+        ),
+        body: Container(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: RefreshIndicator(
+              onRefresh: _refresh,
+              key: _onRefresh,
+              child: ListView.builder(
+                itemCount: _historyChat == null ? 0 : _historyChat.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.teal, width: 1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    elevation: 0,
+                    child: InkWell(
+                      onTap: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          leading: Icon(Icons.chat_bubble_outlined,
+                              color: Colors.teal[300], size: 30.0),
+                          title: Text(_historyChat[index].userTo,
+                              style: TextStyle(
+                                  fontSize: 20.0, fontWeight: FontWeight.w600)),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
         bottomNavigationBar: BottomAppBar(
           child: new Row(
             mainAxisSize: MainAxisSize.max,
@@ -72,7 +153,7 @@ class _HistoryChatState extends State<HistoryChat> {
                   size: 26.0,
                 ),
                 color: Colors.white,
-                onPressed: () => {},
+                onPressed: () {},
               ),
               IconButton(
                 icon: Icon(
@@ -102,107 +183,8 @@ class _HistoryChatState extends State<HistoryChat> {
           color: Theme.of(context).primaryColor,
           shape: CircularNotchedRectangle(),
         ),
-        body: FutureBuilder(
-          future: Common.getToken(),
-          builder: (context, snap) {
-            if (snap.hasData && snap.data != null) {
-              user = snap.data.toString().split(';');
-              return Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Center(
-                        child: Text(
-                      "Riwayat Chat, ${user[2]}",
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black54,
-                          fontWeight: FontWeight.bold),
-                    )),
-                  ),
-                  StreamBuilder(
-                    stream: _stream(),
-                    builder: (context, snap) {
-                      if (snap.hasData) {
-                        var temp = snap.data as Future<List<dynamic>>;
-                        return FutureBuilder(
-                          future: temp,
-                          builder: (context, snap) {
-                            List<dynamic> lst = snap.data;
-                            if (lst != null) {
-                              return Expanded(
-                                child: ListView.builder(
-                                  itemCount: lst.length,
-                                  itemBuilder: (context, index) {
-                                    return Card(
-                                      child: ListTile(
-                                        leading: Icon(Icons.chat_bubble_outline,
-                                            color: Colors.teal, size: 30.0),
-                                        title: Text(
-                                            lst[index]['full_name'].toString()),
-                                        subtitle: Text(
-                                            lst[index]['username'].toString()),
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => ChatPage(
-                                                      user: User(
-                                                          user[0],
-                                                          user[1],
-                                                          user[2],
-                                                          user[3]),
-                                                      userTo: User(
-                                                          lst[index]['username']
-                                                              .toString(),
-                                                          ['password']
-                                                              .toString(),
-                                                          lst[index]
-                                                                  ['full_name']
-                                                              .toString(),
-                                                          lst[index]['email']
-                                                              .toString()))));
-                                        },
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            } else {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                          },
-                        );
-                      } else {
-                        return Container();
-                      }
-                    },
-                  )
-                ],
-              );
-            } else {
-              return Text("Fail");
-            }
-          },
-        ),
       ),
     );
-  }
-
-  Stream<Future<List<dynamic>>> _stream() {
-    Duration interval = Duration(seconds: 1);
-    Stream<Future<List<dynamic>>> stream =
-        Stream<Future<List<dynamic>>>.periodic(interval, _getUser);
-    return stream;
-  }
-
-  Future<List<dynamic>> _getUser(int value) async {
-    var res = await http
-        .post(BaseUrl.getUser, body: {'username': user[0].toString()});
-    var jsonx = json.decode(res.body);
-    return jsonx;
   }
 }
 

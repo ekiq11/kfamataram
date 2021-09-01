@@ -60,38 +60,36 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Container(
-            height: MediaQuery.of(context).size.height * 1,
+            height: MediaQuery.of(context).size.height * 0.9,
             child: Padding(
-              padding: const EdgeInsets.only(top: 20.0),
+              padding: const EdgeInsets.only(bottom: 20.0),
               child: Column(
                 children: <Widget>[
                   Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Selamat Datang di Komunikasi Online Apoteker",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 30.0,
-                                color: Colors.teal,
-                                fontWeight: FontWeight.w400),
-                          ),
-                        ],
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Selamat Datang di \nKomunikasi Online Apoteker",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 25.0,
+                              color: Colors.teal,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Raleway'),
+                        ),
+                      ],
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 20.0),
+                    padding: const EdgeInsets.only(top: 5.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
-                          padding: EdgeInsets.all(5.0),
+                          padding: EdgeInsets.only(top: 35.0),
                           child: Image.asset(
                             'assets/asset6.png',
                             scale: 1,

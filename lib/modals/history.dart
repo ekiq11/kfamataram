@@ -1,46 +1,31 @@
+// To parse this JSON data, do
+//
+//     final chatUser = chatUserFromJson(jsonString);
+
 import 'dart:convert';
 
-import 'package:kf_online/modals/data_api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+List<ChatUser> chatUserFromJson(String str) =>
+    List<ChatUser>.from(json.decode(str).map((x) => ChatUser.fromJson(x)));
 
-class ChatHistory {
-  static Future<String> getChat() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userFrom = prefs.getString("user_from");
-    String userTo = prefs.getString("user_to");
+String chatUserToJson(List<ChatUser> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-    if (userFrom.isEmpty && userTo.isEmpty)
-      return '';
-    else
-      return userFrom + ";" + userTo;
-  }
+class ChatUser {
+  ChatUser({
+    this.userFrom,
+    this.userTo,
+  });
 
-  static Future<void> setToken(String userFrom, String userTo) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (userFrom.isEmpty && userTo.isEmpty) {
-      prefs.remove("user_from");
-      prefs.remove("user_to");
-    } else {
-      prefs.setString("user_from", userFrom);
-      prefs.setString("user_to", userTo);
-    }
-  }
+  String userFrom;
+  String userTo;
 
-  static Future<String> login(String userFrom, String userTo) async {
-    var res = await http
-        .post(BaseUrl.login, body: {'user_from': userFrom, 'user_to': userTo});
-    if (res.statusCode == 200) {
-      if (res.body != null) {
-        var jsonx = json.decode(res.body);
-        await setToken(
-          jsonx['user_from'].toString(),
-          jsonx['user_to'].toString(),
-        );
-      }
-      return res.body;
-    } else {
-      return '';
-    }
-  }
+  factory ChatUser.fromJson(Map<String, dynamic> json) => ChatUser(
+        userFrom: json["user_from"],
+        userTo: json["user_to"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "user_from": userFrom,
+        "user_to": userTo,
+      };
 }

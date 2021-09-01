@@ -21,7 +21,8 @@ class App extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.teal,
         textTheme: TextTheme(
-          headline1: TextStyle(fontSize: 32.0, color: Colors.teal[500]),
+          headline1: TextStyle(
+              fontSize: 32.0, color: Colors.teal[500], fontFamily: 'Raleway'),
           headline2: TextStyle(
               fontSize: 32.0,
               fontWeight: FontWeight.w400,
