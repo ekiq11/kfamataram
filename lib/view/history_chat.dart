@@ -1,3 +1,4 @@
+import 'package:kf_online/modals/detail.dart';
 import 'package:kf_online/modals/history.dart';
 
 import 'package:kf_online/services/chat_services.dart';
