@@ -1,71 +1,37 @@
 import 'dart:convert';
 import 'package:kf_online/modals/data_api.dart';
-import 'package:kf_online/modals/user.dart';
+import 'package:kf_online/modals/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ChatPage extends StatefulWidget {
-  User user;
-  User userTo;
+class DetailChat extends StatefulWidget {
+  Chat user;
+  Chat userTo;
 
-  ChatPage({this.user, this.userTo});
+  DetailChat({this.user, this.userTo});
 
   @override
-  _ChatPageState createState() => _ChatPageState();
+  _DetailChatState createState() => _DetailChatState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _DetailChatState extends State<DetailChat> {
   TextEditingController _ctrlMess = TextEditingController();
-  // File _image;
+  String username = "", fullName = "", email = "", password = "";
+  getPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      username = preferences.getString("username");
+      fullName = preferences.getString("full_name");
+      email = preferences.getString("email");
+      password = preferences.getString("password");
+    });
+  }
 
-  // Future getImage(ImageSource media) async {
-  //   var img = await ImagePicker.pickImage(source: media);
-  //   setState(() {
-  //     _image = img;
-  //   });
-  // }
-
-  void myAlert() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            title: Text('Please choose media to select'),
-            content: Container(
-              height: MediaQuery.of(context).size.height / 6,
-              child: Column(
-                children: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      // Navigator.pop(context);
-                      // getImage(ImageSource.gallery);
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Icon(Icons.image),
-                        Text('From Gallery'),
-                      ],
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      // Navigator.pop(context);
-                      // getImage(ImageSource.camera);
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Icon(Icons.camera),
-                        Text('From Camera'),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
+  @override
+  void initState() {
+    super.initState();
+    getPref();
   }
 
   @override
@@ -118,7 +84,7 @@ class _ChatPageState extends State<ChatPage> {
                       children: [
                         Container(
                           child: Text(
-                            "Apt.  " + widget.userTo.fullName,
+                            "Apt.  " + widget.user.userFrom,
                             style: TextStyle(
                                 fontSize: 18, color: Colors.teal[800]),
                           ),
@@ -157,17 +123,19 @@ class _ChatPageState extends State<ChatPage> {
                     FutureBuilder(
                       future: temp,
                       builder: (context, snap) {
-                        List<dynamic> lst = snap.data;
-                        if (lst != null) {
+                        List<dynamic> _historyChat = snap.data;
+                        if (_historyChat != null) {
                           return Expanded(
                             child: ListView.builder(
-                              itemCount: lst.length,
+                              itemCount: _historyChat.length,
                               itemBuilder: (context, index) {
-                                var username = lst[index]['user'];
-                                var mess = lst[index]['content'].toString();
+                                var username =
+                                    _historyChat[index]['user'].toString();
+                                var mess =
+                                    _historyChat[index]['content'].toString();
 
                                 return Container(
-                                    margin: username == widget.user.username
+                                    margin: username == widget.user.userFrom
                                         ? EdgeInsets.only(
                                             right: 2,
                                             bottom: 5,
@@ -182,17 +150,17 @@ class _ChatPageState extends State<ChatPage> {
                                     child: Text(
                                       mess,
                                       textAlign:
-                                          username == widget.user.username
+                                          username == widget.user.userFrom
                                               ? TextAlign.right
                                               : TextAlign.left,
                                       style: TextStyle(
                                           color:
-                                              username == widget.user.username
+                                              username == widget.user.userFrom
                                                   ? Colors.white
                                                   : Colors.black),
                                     ),
                                     decoration: BoxDecoration(
-                                      color: username == widget.user.username
+                                      color: username == widget.user.userFrom
                                           ? Colors.teal[300]
                                           : Colors.blueGrey[100],
                                       borderRadius:
@@ -230,9 +198,7 @@ class _ChatPageState extends State<ChatPage> {
                                       Icons.image,
                                       color: Colors.teal[300],
                                     ),
-                                    onPressed: () {
-                                      myAlert();
-                                    }),
+                                    onPressed: () {}),
                               ),
                               Container(
                                 child: IconButton(
@@ -276,29 +242,25 @@ class _ChatPageState extends State<ChatPage> {
     Duration interval = Duration(seconds: 1);
     Stream<Future<List<dynamic>>> stream =
         Stream<Future<List<dynamic>>>.periodic(interval, _getData);
+    print('cetak' + '$email');
     return stream;
   }
 
   Future<List<dynamic>> _getData(int value) async {
     var res = await http.post(BaseUrl.getMess, body: {
-      'username': widget.user.username,
-      'email': widget.user.email,
-      'password': widget.user.password,
-      'user_to': widget.userTo.username
+      'username': widget.user.userFrom,
+      'email': '$email',
+      'password': '$password',
+      'user_to': widget.userTo.userTo
     });
     var jsonx = json.decode(res.body);
-    print(widget.user.username);
-    print(widget.user.email);
-    print(widget.user.password);
     return jsonx;
   }
 
   _sendMess(String content, image) async {
     var res = await http.post(BaseUrl.sendMess, body: {
-      'username': widget.user.username,
-      'password': widget.user.password,
-      'email': widget.user.email,
-      'user_to': widget.userTo.username,
+      'username': widget.user.userFrom,
+      'user_to': widget.userTo.userTo,
       'content': content,
       'image': image,
     });

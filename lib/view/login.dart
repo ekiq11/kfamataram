@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final formKey = new GlobalKey<FormState>();
 
   savePref(
-      String username, String fullName, String emai, String password) async {
+      String username, String fullName, String email, String password) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setString("username", username);

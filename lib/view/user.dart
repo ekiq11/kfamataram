@@ -19,10 +19,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var user = [];
 
-  savePref(String username) async {
+  savePref(
+      String username, String fullName, String email, String password) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setString("username", username);
+      preferences.setString("full_name", fullName);
+      preferences.setString("email", email);
+      preferences.setString("password", password);
     });
   }
 

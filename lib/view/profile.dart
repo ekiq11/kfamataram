@@ -25,7 +25,8 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  savePref(String username, String fullName, String email) async {
+  savePref(
+      String username, String fullName, String email, String password) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setString("username", username);

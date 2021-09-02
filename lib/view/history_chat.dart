@@ -1,8 +1,8 @@
 import 'package:kf_online/modals/detail.dart';
 import 'package:kf_online/modals/history.dart';
-
 import 'package:kf_online/services/chat_services.dart';
 import 'package:flutter/material.dart';
+import 'package:kf_online/view/detail_chat.dart';
 import 'package:kf_online/view/lokasi.dart';
 import 'package:kf_online/view/profile.dart';
 import 'package:kf_online/view/user.dart';
@@ -17,15 +17,18 @@ class _HistoryChatState extends State<HistoryChat> {
   List<ChatUser> _historyChat;
   final GlobalKey<RefreshIndicatorState> _onRefresh =
       GlobalKey<RefreshIndicatorState>();
+  String username = "", fullName = "", email = "", password = "";
   @override
   void initState() {
     super.initState();
-    String username = "";
 
     _getPref() async {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       setState(() {
         username = preferences.getString("username");
+        fullName = preferences.getString("full_name");
+        email = preferences.getString("email");
+        password = preferences.getString("password");
         print(username);
         ChatServices.getHistory(username).then((historyChat) {
           setState(() {
@@ -40,7 +43,16 @@ class _HistoryChatState extends State<HistoryChat> {
     });
   }
 
-  String username = "";
+  savePref(
+      String username, String fullName, String email, String password) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      preferences.setString("username", username);
+      preferences.setString("full_name", fullName);
+      preferences.setString("email", email);
+      preferences.setString("password", password);
+    });
+  }
 
   Future<void> _refresh() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -108,7 +120,19 @@ class _HistoryChatState extends State<HistoryChat> {
                     ),
                     elevation: 0,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DetailChat(
+                                    user: Chat(_historyChat[index].userFrom,
+                                        _historyChat[index].userTo),
+                                    userTo: Chat(
+                                        _historyChat[index].userFrom.toString(),
+                                        _historyChat[index]
+                                            .userTo
+                                            .toString()))));
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ListTile(
