@@ -11,12 +11,12 @@ import 'package:kf_online/view/lokasi.dart';
 import 'package:kf_online/view/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePage extends StatefulWidget {
+class UserLogin extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _UserLoginState createState() => _UserLoginState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _UserLoginState extends State<UserLogin> {
   var user = [];
 
   savePref(
@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                                                           child: Text(
                                                               '\n                               Apt. ' +
                                                                   lst[index][
-                                                                          'full_name']
+                                                                          'username']
                                                                       .toString(),
                                                               style: TextStyle(
                                                                   fontSize:

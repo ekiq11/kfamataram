@@ -24,15 +24,17 @@ class App extends StatelessWidget {
           headline1: TextStyle(
               fontSize: 32.0, color: Colors.teal[500], fontFamily: 'Raleway'),
           headline2: TextStyle(
-              fontSize: 32.0,
+              fontSize: 28.0,
               fontWeight: FontWeight.w400,
-              color: Colors.teal[500]),
-          bodyText1: TextStyle(
-              fontSize: 18.0,
               color: Colors.teal[500],
+              fontFamily: 'Raleway'),
+          bodyText1: TextStyle(
+              fontSize: 16.0,
+              color: Colors.teal[500],
+              fontFamily: 'Raleway',
               fontWeight: FontWeight.w700),
           bodyText2: TextStyle(
-              fontSize: 18.0,
+              fontSize: 16.0,
               height: 1.3,
               color: Colors.black45,
               fontWeight: FontWeight.w300),

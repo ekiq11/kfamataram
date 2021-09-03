@@ -51,6 +51,7 @@ class _HistoryChatState extends State<HistoryChat> {
       preferences.setString("full_name", fullName);
       preferences.setString("email", email);
       preferences.setString("password", password);
+      preferences.setString("password", password);
     });
   }
 
@@ -113,38 +114,37 @@ class _HistoryChatState extends State<HistoryChat> {
               child: ListView.builder(
                 itemCount: _historyChat == null ? 0 : _historyChat.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.teal, width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    elevation: 0,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DetailChat(
-                                    user: Chat(_historyChat[index].userFrom,
-                                        _historyChat[index].userTo),
-                                    userTo: Chat(
-                                        _historyChat[index].userFrom.toString(),
-                                        _historyChat[index]
-                                            .userTo
-                                            .toString()))));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          leading: Icon(Icons.chat_bubble_outlined,
-                              color: Colors.teal[300], size: 30.0),
-                          title: Text(_historyChat[index].userTo,
+                  return Container(
+                      child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DetailChat(
+                                  user: Chat(_historyChat[index].userFrom,
+                                      _historyChat[index].userTo),
+                                  userTo: Chat(
+                                      _historyChat[index].userFrom.toString(),
+                                      _historyChat[index].userTo.toString()))));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(1.0),
+                      child: username != _historyChat[index].userFrom
+                          ? ListTile(
+                              leading: Icon(Icons.chat_bubble_outlined,
+                                  color: Colors.orange[300], size: 30.0),
+                              title: Text(_historyChat[index].userFrom,
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w500)),
+                            )
+                          : Text("Refresh",
                               style: TextStyle(
-                                  fontSize: 20.0, fontWeight: FontWeight.w600)),
-                        ),
-                      ),
+                                fontSize: 0.0,
+                              )),
                     ),
-                  );
+                  ));
                 },
               ),
             ),
@@ -166,7 +166,7 @@ class _HistoryChatState extends State<HistoryChat> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return HomePage();
+                        return UserLogin();
                       },
                     ),
                   );

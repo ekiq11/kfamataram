@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kf_online/modals/commons.dart';
+import 'package:kf_online/view/chat.dart';
 import 'package:kf_online/view/daftar.dart';
 import 'package:kf_online/view/lupa_pass.dart';
 import 'package:kf_online/view/user.dart';
@@ -190,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return HomePage();
+                        return UserLogin();
                       },
                     ),
                   );

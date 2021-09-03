@@ -230,9 +230,7 @@ class _ChatPageState extends State<ChatPage> {
                                       Icons.image,
                                       color: Colors.teal[300],
                                     ),
-                                    onPressed: () {
-                                      myAlert();
-                                    }),
+                                    onPressed: () {}),
                               ),
                               Container(
                                 child: IconButton(

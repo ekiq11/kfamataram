@@ -22,7 +22,7 @@ class Common {
   }
 
   static Future<void> setToken(
-      String username, String password, String fullName, email) async {
+      String username, String password, String fullName, String email) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (username.isEmpty &&
         password.isEmpty &&

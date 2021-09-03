@@ -79,7 +79,7 @@ class _LokasiApotekState extends State<LokasiApotek> {
                           color: Colors.orange, size: 30.0),
                       title: Text(_lokasi[index].namaApt,
                           style: TextStyle(
-                              fontSize: 20.0, fontWeight: FontWeight.bold)),
+                              fontSize: 18.0, fontWeight: FontWeight.bold)),
                       subtitle: Text(_lokasi[index].alamatApt +
                           "\n" +
                           _lokasi[index].noHp),
@@ -106,7 +106,7 @@ class _LokasiApotekState extends State<LokasiApotek> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return HomePage();
+                        return UserLogin();
                       },
                     ),
                   );

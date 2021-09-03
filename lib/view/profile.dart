@@ -87,7 +87,7 @@ class _ProfileState extends State<Profile> {
             children: <Widget>[
               CircleAvatar(
                 radius: 65,
-                backgroundImage: AssetImage('assets/asset1.png'),
+                backgroundImage: AssetImage('assets/avatar.png'),
               ),
               SizedBox(
                 height: 10,
@@ -179,7 +179,7 @@ class _ProfileState extends State<Profile> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return HomePage();
+                        return UserLogin();
                       },
                     ),
                   );

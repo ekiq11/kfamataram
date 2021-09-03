@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:kf_online/modals/data_api.dart';
 import 'package:kf_online/modals/detail.dart';
+import 'package:kf_online/modals/user.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,6 +33,49 @@ class _DetailChatState extends State<DetailChat> {
   void initState() {
     super.initState();
     getPref();
+  }
+
+  void myAlert() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            title: Text('Please choose media to select'),
+            content: Container(
+              height: MediaQuery.of(context).size.height / 6,
+              child: Column(
+                children: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      // Navigator.pop(context);
+                      // getImage(ImageSource.gallery);
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.image),
+                        Text('From Gallery'),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      // Navigator.pop(context);
+                      // getImage(ImageSource.camera);
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.camera),
+                        Text('From Camera'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   @override
@@ -84,7 +128,7 @@ class _DetailChatState extends State<DetailChat> {
                       children: [
                         Container(
                           child: Text(
-                            "Apt.  " + widget.user.userFrom,
+                            "Sdr.  " + widget.userTo.userTo,
                             style: TextStyle(
                                 fontSize: 18, color: Colors.teal[800]),
                           ),
@@ -123,16 +167,14 @@ class _DetailChatState extends State<DetailChat> {
                     FutureBuilder(
                       future: temp,
                       builder: (context, snap) {
-                        List<dynamic> _historyChat = snap.data;
-                        if (_historyChat != null) {
+                        List<dynamic> lst = snap.data;
+                        if (lst != null) {
                           return Expanded(
                             child: ListView.builder(
-                              itemCount: _historyChat.length,
+                              itemCount: lst.length,
                               itemBuilder: (context, index) {
-                                var username =
-                                    _historyChat[index]['user'].toString();
-                                var mess =
-                                    _historyChat[index]['content'].toString();
+                                var username = lst[index]['user'];
+                                var mess = lst[index]['content'].toString();
 
                                 return Container(
                                     margin: username == widget.user.userFrom
@@ -198,7 +240,9 @@ class _DetailChatState extends State<DetailChat> {
                                       Icons.image,
                                       color: Colors.teal[300],
                                     ),
-                                    onPressed: () {}),
+                                    onPressed: () {
+                                      myAlert();
+                                    }),
                               ),
                               Container(
                                 child: IconButton(
@@ -208,10 +252,9 @@ class _DetailChatState extends State<DetailChat> {
                                     ),
                                     onPressed: () async {
                                       String content = _ctrlMess.text.trim();
-                                      String image = _ctrlMess.text.trim();
+
                                       if (content.isNotEmpty) {
-                                        var res =
-                                            await _sendMess(content, image);
+                                        var res = await _sendMess(content);
                                         print(res);
                                         _ctrlMess.text = "";
                                       } else {
@@ -242,7 +285,6 @@ class _DetailChatState extends State<DetailChat> {
     Duration interval = Duration(seconds: 1);
     Stream<Future<List<dynamic>>> stream =
         Stream<Future<List<dynamic>>>.periodic(interval, _getData);
-    print('cetak' + '$email');
     return stream;
   }
 
@@ -254,15 +296,17 @@ class _DetailChatState extends State<DetailChat> {
       'user_to': widget.userTo.userTo
     });
     var jsonx = json.decode(res.body);
+
     return jsonx;
   }
 
-  _sendMess(String content, image) async {
+  _sendMess(String content) async {
     var res = await http.post(BaseUrl.sendMess, body: {
+      'email': '$email',
+      'password': '$password',
       'username': widget.user.userFrom,
       'user_to': widget.userTo.userTo,
       'content': content,
-      'image': image,
     });
     return res.body;
   }

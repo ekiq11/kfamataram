@@ -1,10 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kf_online/modals/data_api.dart';
-
-import 'login.dart';
+import 'package:kf_online/view/login.dart';
 
 class Daftar extends StatefulWidget {
   @override
