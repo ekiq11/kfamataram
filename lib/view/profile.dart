@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:kf_online/view/edit_profile.dart';
-import 'package:kf_online/view/history_chat.dart';
-import 'package:kf_online/view/user.dart';
 import 'package:kf_online/view/login.dart';
-import 'package:kf_online/view/lokasi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
@@ -162,64 +158,6 @@ class _ProfileState extends State<Profile> {
               ),
             ],
           ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          child: new Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              SizedBox(height: 60.0),
-              IconButton(
-                icon: Icon(
-                  Icons.home,
-                  size: 26.0,
-                ),
-                color: Colors.white70,
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return UserLogin();
-                      },
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.chat_bubble,
-                  size: 26.0,
-                ),
-                color: Colors.white70,
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HistoryChat()))
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.location_on,
-                  size: 26.0,
-                ),
-                color: Colors.white70,
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LokasiApotek()))
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.person,
-                  size: 26.0,
-                ),
-                color: Colors.white,
-                onPressed: () => {},
-              ),
-              SizedBox(width: 7),
-            ],
-          ),
-          color: Theme.of(context).primaryColor,
-          shape: CircularNotchedRectangle(),
         ),
       ),
     );

@@ -11,32 +11,45 @@ class Common {
     String password = prefs.getString("password");
     String fullName = prefs.getString("full_name");
     String email = prefs.getString("email");
+    String image = prefs.getString("image");
 
     if (username.isEmpty &&
         password.isEmpty &&
         fullName.isEmpty &&
-        email.isEmpty)
+        email.isEmpty &&
+        image.isEmpty)
       return '';
     else
-      return username + ";" + password + ";" + fullName + ";" + email;
+      return username +
+          ";" +
+          password +
+          ";" +
+          fullName +
+          ";" +
+          email +
+          ";" +
+          image;
   }
 
-  static Future<void> setToken(
-      String username, String password, String fullName, String email) async {
+  static Future<void> setToken(String username, String password,
+      String fullName, String email, String image) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (username.isEmpty &&
         password.isEmpty &&
         fullName.isEmpty &&
-        email.isEmpty) {
+        email.isEmpty &&
+        image.isEmpty) {
       prefs.remove("username");
       prefs.remove("password");
       prefs.remove("full_name");
       prefs.remove("email");
+      prefs.remove("image");
     } else {
       prefs.setString("username", username);
       prefs.setString("password", password);
       prefs.setString("full_name", fullName);
       prefs.setString("email", email);
+      prefs.setString("image", image);
     }
   }
 
@@ -50,7 +63,8 @@ class Common {
             jsonx['username'].toString(),
             jsonx['password'].toString(),
             jsonx['full_name'].toString(),
-            jsonx['email'].toString());
+            jsonx['email'].toString(),
+            jsonx['image'].toString());
       }
       return res.body;
     } else {

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kf_online/modals/commons.dart';
-import 'package:kf_online/view/chat.dart';
+import 'package:kf_online/view/bottom_nav.dart';
 import 'package:kf_online/view/daftar.dart';
 import 'package:kf_online/view/lupa_pass.dart';
-import 'package:kf_online/view/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -178,7 +177,8 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(
                     color: Colors.teal,
                     fontSize: 16,
-                    fontWeight: FontWeight.w400),
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Raleway'),
               ),
             ),
           ),
@@ -191,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return UserLogin();
+                        return BottomNav();
                       },
                     ),
                   );
@@ -204,7 +204,11 @@ class _LoginPageState extends State<LoginPage> {
               child: Center(
                 child: Text(
                   'Login',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontFamily: 'Raleway',
+                      fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -217,7 +221,8 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(
                     fontSize: 16,
                     color: Colors.teal,
-                    fontWeight: FontWeight.w400),
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Raleway'),
               ),
               onPressed: () {
                 Navigator.of(context).push(

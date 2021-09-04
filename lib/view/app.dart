@@ -22,10 +22,13 @@ class App extends StatelessWidget {
         primarySwatch: Colors.teal,
         textTheme: TextTheme(
           headline1: TextStyle(
-              fontSize: 32.0, color: Colors.teal[500], fontFamily: 'Raleway'),
+              fontSize: 32.0,
+              color: Colors.teal[500],
+              fontFamily: 'Raleway',
+              fontWeight: FontWeight.w600),
           headline2: TextStyle(
               fontSize: 28.0,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.w300,
               color: Colors.teal[500],
               fontFamily: 'Raleway'),
           bodyText1: TextStyle(

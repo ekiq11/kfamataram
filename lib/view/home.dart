@@ -1,7 +1,7 @@
+import 'package:kf_online/view/bottom_nav.dart';
 import 'package:kf_online/view/botton_buttons.dart';
 import 'package:kf_online/view/explanation.dart';
 import 'package:flutter/material.dart';
-import 'package:kf_online/view/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final List<ExplanationData> data = [
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> /*with ChangeNotifier*/ {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (BuildContext context) {
-              return Profile();
+              return BottomNav();
             },
           ),
         );

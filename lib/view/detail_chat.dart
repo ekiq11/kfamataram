@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:kf_online/modals/data_api.dart';
 import 'package:kf_online/modals/detail.dart';
-import 'package:kf_online/modals/user.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -130,7 +129,9 @@ class _DetailChatState extends State<DetailChat> {
                           child: Text(
                             "Sdr.  " + widget.userTo.userTo,
                             style: TextStyle(
-                                fontSize: 18, color: Colors.teal[800]),
+                                fontSize: 18,
+                                color: Colors.teal[800],
+                                fontFamily: 'Raleway'),
                           ),
                         ),
                       ],

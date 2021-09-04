@@ -3,9 +3,6 @@ import 'package:kf_online/modals/history.dart';
 import 'package:kf_online/services/chat_services.dart';
 import 'package:flutter/material.dart';
 import 'package:kf_online/view/detail_chat.dart';
-import 'package:kf_online/view/lokasi.dart';
-import 'package:kf_online/view/profile.dart';
-import 'package:kf_online/view/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryChat extends StatefulWidget {
@@ -74,37 +71,27 @@ class _HistoryChatState extends State<HistoryChat> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          elevation: 0,
-          toolbarHeight: 100.0,
-          title: Column(
-            children: [
-              new Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    'assets/asset4.png',
-                    fit: BoxFit.contain,
-                    height: 20,
-                  ),
-                  Container(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        'assets/asset5.png',
-                        fit: BoxFit.contain,
-                        height: 30,
-                      ))
-                ],
-              ),
-              Column(
-                children: [
-                  Text("Percakapan", style: TextStyle(color: Colors.teal))
-                ],
-              )
-            ],
-          ),
-        ),
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.white,
+            elevation: 0,
+            toolbarHeight: 80.0,
+            title: new Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset(
+                  'assets/asset4.png',
+                  fit: BoxFit.contain,
+                  height: 20,
+                ),
+                Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset(
+                      'assets/asset5.png',
+                      fit: BoxFit.contain,
+                      height: 30,
+                    ))
+              ],
+            )),
         body: Container(
           child: Padding(
             padding: const EdgeInsets.only(top: 10.0),
@@ -149,64 +136,6 @@ class _HistoryChatState extends State<HistoryChat> {
               ),
             ),
           ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          child: new Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              SizedBox(height: 60.0),
-              IconButton(
-                icon: Icon(
-                  Icons.home,
-                  size: 26.0,
-                ),
-                color: Colors.white70,
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return UserLogin();
-                      },
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.chat_bubble,
-                  size: 26.0,
-                ),
-                color: Colors.white,
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.location_on,
-                  size: 26.0,
-                ),
-                color: Colors.white70,
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LokasiApotek()))
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.person,
-                  size: 26.0,
-                ),
-                color: Colors.white70,
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Profile()))
-                },
-              ),
-              SizedBox(width: 7),
-            ],
-          ),
-          color: Theme.of(context).primaryColor,
-          shape: CircularNotchedRectangle(),
         ),
       ),
     );

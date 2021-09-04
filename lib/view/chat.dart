@@ -118,9 +118,12 @@ class _ChatPageState extends State<ChatPage> {
                       children: [
                         Container(
                           child: Text(
-                            "Apt.  " + widget.userTo.fullName,
+                            "Apt.  " + widget.userTo.username,
                             style: TextStyle(
-                                fontSize: 18, color: Colors.teal[800]),
+                                fontSize: 18,
+                                color: Colors.teal[800],
+                                fontFamily: 'Raleway',
+                                fontWeight: FontWeight.w400),
                           ),
                         ),
                       ],

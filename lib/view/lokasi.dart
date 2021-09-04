@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:kf_online/modals/map_json.dart';
 import 'package:kf_online/services/map_services.dart';
-import 'package:kf_online/view/history_chat.dart';
-
-import 'package:kf_online/view/user.dart';
-import 'package:kf_online/view/profile.dart';
 
 class LokasiApotek extends StatefulWidget {
   @override
@@ -89,69 +85,6 @@ class _LokasiApotekState extends State<LokasiApotek> {
               },
             ),
           ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          child: new Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              SizedBox(height: 60.0),
-              IconButton(
-                icon: Icon(
-                  Icons.home,
-                  size: 26.0,
-                ),
-                color: Colors.white70,
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return UserLogin();
-                      },
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.chat_bubble,
-                  size: 26.0,
-                ),
-                color: Colors.white70,
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return HistoryChat();
-                      },
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.location_on,
-                  size: 26.0,
-                ),
-                color: Colors.white,
-                onPressed: () => {},
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.person,
-                  size: 26.0,
-                ),
-                color: Colors.white70,
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Profile()))
-                },
-              ),
-              SizedBox(width: 7),
-            ],
-          ),
-          color: Theme.of(context).primaryColor,
-          shape: CircularNotchedRectangle(),
         ),
       ),
     );

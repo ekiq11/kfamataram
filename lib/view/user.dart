@@ -6,9 +6,6 @@ import 'package:kf_online/modals/commons.dart';
 import 'package:kf_online/modals/user.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:kf_online/view/history_chat.dart';
-import 'package:kf_online/view/lokasi.dart';
-import 'package:kf_online/view/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserLogin extends StatefulWidget {
@@ -18,15 +15,17 @@ class UserLogin extends StatefulWidget {
 
 class _UserLoginState extends State<UserLogin> {
   var user = [];
+  String username = "", fullName = "", email = "", password = "", image = "";
 
-  savePref(
-      String username, String fullName, String email, String password) async {
+  savePref(String username, String fullName, String email, String password,
+      String image) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setString("username", username);
       preferences.setString("full_name", fullName);
       preferences.setString("email", email);
       preferences.setString("password", password);
+      preferences.setString("image", image);
     });
   }
 
@@ -56,59 +55,6 @@ class _UserLoginState extends State<UserLogin> {
                     ))
               ],
             )),
-        bottomNavigationBar: BottomAppBar(
-          child: new Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              SizedBox(height: 60.0),
-              IconButton(
-                icon: Icon(
-                  Icons.home,
-                  size: 26.0,
-                ),
-                color: Colors.white,
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.chat_bubble,
-                  size: 26.0,
-                ),
-                color: Colors.white70,
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HistoryChat()))
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.location_on,
-                  size: 26.0,
-                ),
-                color: Colors.white70,
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LokasiApotek()))
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.person,
-                  size: 26.0,
-                ),
-                color: Colors.white70,
-                onPressed: () => {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Profile()))
-                },
-              ),
-              SizedBox(width: 7),
-            ],
-          ),
-          color: Theme.of(context).primaryColor,
-          shape: CircularNotchedRectangle(),
-        ),
         body: FutureBuilder(
           future: Common.getToken(),
           builder: (context, snap) {
@@ -128,7 +74,10 @@ class _UserLoginState extends State<UserLogin> {
                                 child: Text(
                                   'Tanya Apoteker',
                                   style: TextStyle(
-                                      fontSize: 30, color: Colors.black87),
+                                      fontSize: 30,
+                                      color: Colors.teal,
+                                      fontFamily: 'Raleway',
+                                      fontWeight: FontWeight.w600),
                                 ),
                               ),
                             ),
@@ -156,8 +105,40 @@ class _UserLoginState extends State<UserLogin> {
                                       ),
                                       child: new Stack(
                                         children: <Widget>[
-                                          planetCard,
-                                          planetThumbnail,
+                                          new Container(
+                                            padding: const EdgeInsets.only(
+                                                top: 30.0),
+                                            height: 174.0,
+                                            decoration: new BoxDecoration(
+                                              color: Colors.white,
+                                              shape: BoxShape.rectangle,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10)),
+                                              border: Border.all(
+                                                  color: Colors.teal),
+                                              boxShadow: <BoxShadow>[
+                                                new BoxShadow(
+                                                  color: Colors.white60,
+                                                  blurRadius: 4.0,
+                                                  offset: new Offset(0.0, 10.0),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          new Container(
+                                            alignment:
+                                                FractionalOffset.centerLeft,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0),
+                                              child: new Image.network(
+                                                  'https://wisatakuapps.com/kf_api/kfonline/image/' +
+                                                      lst[index]['image']
+                                                          .toString()),
+                                            ),
+                                            height: 170.0,
+                                            width: 170.0,
+                                          ),
                                           Column(
                                             children: [
                                               Padding(
@@ -192,7 +173,9 @@ class _UserLoginState extends State<UserLogin> {
                                                                       17.0,
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .w400)),
+                                                                          .w400,
+                                                                  fontFamily:
+                                                                      'Raleway')),
                                                         ),
                                                       ],
                                                     ),
@@ -225,8 +208,9 @@ class _UserLoginState extends State<UserLogin> {
                                                                                 user[0],
                                                                                 user[1],
                                                                                 user[2],
+                                                                                user[3],
                                                                                 user[3]),
-                                                                            userTo: User(lst[index]['username'].toString(), ['password'].toString(), lst[index]['full_name'].toString(), lst[index]['email'].toString()))));
+                                                                            userTo: User(lst[index]['username'].toString(), ['password'].toString(), lst[index]['full_name'].toString(), lst[index]['email'].toString(), lst[index]['image']))));
                                                               },
                                                               style: ElevatedButton
                                                                   .styleFrom(
@@ -247,7 +231,9 @@ class _UserLoginState extends State<UserLogin> {
                                                                           15.0,
                                                                       fontWeight:
                                                                           FontWeight
-                                                                              .w500))),
+                                                                              .w400,
+                                                                      fontFamily:
+                                                                          'Raleway'))),
                                                         ],
                                                       ),
                                                     ),
@@ -299,30 +285,3 @@ class _UserLoginState extends State<UserLogin> {
     return jsonx;
   }
 }
-
-final planetThumbnail = new Container(
-  alignment: FractionalOffset.centerLeft,
-  child: new Image(
-    image: new AssetImage("assets/asset1.png"),
-    height: 170.0,
-    width: 170.0,
-  ),
-);
-
-final planetCard = new Container(
-  padding: const EdgeInsets.only(top: 30.0),
-  height: 174.0,
-  decoration: new BoxDecoration(
-    color: Colors.white,
-    shape: BoxShape.rectangle,
-    borderRadius: BorderRadius.all(Radius.circular(10)),
-    border: Border.all(color: Colors.teal),
-    boxShadow: <BoxShadow>[
-      new BoxShadow(
-        color: Colors.white60,
-        blurRadius: 4.0,
-        offset: new Offset(0.0, 10.0),
-      ),
-    ],
-  ),
-);
