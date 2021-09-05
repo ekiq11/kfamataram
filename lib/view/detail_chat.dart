@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:kf_online/modals/data_api.dart';
 import 'package:kf_online/modals/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path/path.dart' as path;
+import 'package:async/async.dart';
 
 class DetailChat extends StatefulWidget {
   Chat user;
@@ -16,7 +20,14 @@ class DetailChat extends StatefulWidget {
 }
 
 class _DetailChatState extends State<DetailChat> {
-  TextEditingController _ctrlMess = TextEditingController();
+  File _imageFile;
+  TextEditingController _content = TextEditingController();
+  // Future getImage(ImageSource media) async {
+  //   var img = await ImagePicker.pickImage(source: media);
+  //   setState(() {
+  //     _image = img;
+  //   });
+  // }
   String username = "", fullName = "", email = "", password = "";
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -28,53 +39,110 @@ class _DetailChatState extends State<DetailChat> {
     });
   }
 
+  _kirimText() async {
+    try {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      setState(() {
+        username = preferences.getString("username");
+        fullName = preferences.getString("full_name");
+        email = preferences.getString("email");
+        password = preferences.getString("password");
+      });
+      var uri = Uri.parse(BaseUrl.sendMess);
+
+      final request = http.MultipartRequest("POST", uri);
+
+      request.fields['content'] = _content.text;
+
+      request.fields['username'] = preferences.getString("username");
+      request.fields['password'] = preferences.getString("password");
+      request.fields['user_to'] = widget.userTo.userTo;
+
+      await request.send();
+    } catch (e) {
+      debugPrint("Error $e");
+    }
+  }
+
+  _kirimGambar() async {
+    try {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      setState(() {
+        username = preferences.getString("username");
+        fullName = preferences.getString("full_name");
+        email = preferences.getString("email");
+        password = preferences.getString("password");
+      });
+      var uri = Uri.parse(BaseUrl.sendMess);
+      var stream =
+          // ignore: deprecated_member_use
+          http.ByteStream(DelegatingStream.typed(_imageFile.openRead()));
+      final request = http.MultipartRequest("POST", uri);
+      var length = await _imageFile.length();
+      request.fields['content'] = _content.text;
+      request.files.add(http.MultipartFile("image", stream, length,
+          filename: path.basename(_imageFile.path)));
+      request.fields['username'] = preferences.getString("username");
+      request.fields['password'] = preferences.getString("password");
+      request.fields['user_to'] = widget.userTo.userTo;
+
+      await request.send();
+    } catch (e) {
+      debugPrint("Error $e");
+    }
+  }
+
+  _kirimpesan() async {
+    try {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      setState(() {
+        username = preferences.getString("username");
+        fullName = preferences.getString("full_name");
+        email = preferences.getString("email");
+        password = preferences.getString("password");
+      });
+      var uri = Uri.parse(BaseUrl.sendMess);
+      var stream =
+          // ignore: deprecated_member_use
+          http.ByteStream(DelegatingStream.typed(_imageFile.openRead()));
+      final request = http.MultipartRequest("POST", uri);
+      var length = await _imageFile.length();
+
+      request.files.add(http.MultipartFile("image", stream, length,
+          filename: path.basename(_imageFile.path)));
+      request.fields['content'] = _content.text;
+      request.fields['username'] = preferences.getString("username");
+      request.fields['password'] = preferences.getString("password");
+      request.fields['user_to'] = widget.userTo.userTo;
+
+      await request.send();
+    } catch (e) {
+      debugPrint("Error $e");
+    }
+  }
+
+  pilihGallery() async {
+    // ignore: deprecated_member_use
+    var image = await ImagePicker.pickImage(
+        source: ImageSource.gallery, maxHeight: 1920.0, maxWidth: 1080.0);
+    setState(() {
+      _imageFile = image;
+    });
+  }
+
+  pilihCamera() async {
+    // ignore: deprecated_member_use
+    var image = await ImagePicker.pickImage(
+        source: ImageSource.camera, maxHeight: 1920.0, maxWidth: 1080.0);
+    setState(() {
+      _imageFile = image;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     getPref();
-  }
-
-  void myAlert() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            title: Text('Please choose media to select'),
-            content: Container(
-              height: MediaQuery.of(context).size.height / 6,
-              child: Column(
-                children: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      // Navigator.pop(context);
-                      // getImage(ImageSource.gallery);
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Icon(Icons.image),
-                        Text('From Gallery'),
-                      ],
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      // Navigator.pop(context);
-                      // getImage(ImageSource.camera);
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Icon(Icons.camera),
-                        Text('From Camera'),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
   }
 
   @override
@@ -127,11 +195,12 @@ class _DetailChatState extends State<DetailChat> {
                       children: [
                         Container(
                           child: Text(
-                            "Sdr.  " + widget.userTo.userTo,
+                            "Apt.  " + widget.userTo.userFrom,
                             style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.teal[800],
-                                fontFamily: 'Raleway'),
+                                fontFamily: 'Raleway',
+                                fontWeight: FontWeight.w400),
                           ),
                         ),
                       ],
@@ -156,7 +225,6 @@ class _DetailChatState extends State<DetailChat> {
           // )
         ),
         body: Container(
-          color: Colors.teal[50],
           child: StreamBuilder(
             initialData: null,
             stream: _stream(),
@@ -172,43 +240,200 @@ class _DetailChatState extends State<DetailChat> {
                         if (lst != null) {
                           return Expanded(
                             child: ListView.builder(
+                              primary: false,
+                              shrinkWrap: true,
                               itemCount: lst.length,
                               itemBuilder: (context, index) {
                                 var username = lst[index]['user'];
+                                var image = lst[index]['image'];
                                 var mess = lst[index]['content'].toString();
 
-                                return Container(
-                                    margin: username == widget.user.userFrom
-                                        ? EdgeInsets.only(
-                                            right: 2,
-                                            bottom: 5,
-                                            top: 5,
-                                            left: 100)
-                                        : EdgeInsets.only(
-                                            right: 100,
-                                            bottom: 5,
-                                            top: 5,
-                                            left: 2),
-                                    padding: EdgeInsets.all(13),
-                                    child: Text(
-                                      mess,
-                                      textAlign:
-                                          username == widget.user.userFrom
-                                              ? TextAlign.right
-                                              : TextAlign.left,
-                                      style: TextStyle(
-                                          color:
+                                if (image == "") {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        username == widget.user.userFrom
+                                            ? CrossAxisAlignment.end
+                                            : CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        margin: username == widget.user.userFrom
+                                            ? EdgeInsets.only(
+                                                right: 2,
+                                                bottom: 5,
+                                                top: 5,
+                                                left: 100)
+                                            : EdgeInsets.only(
+                                                right: 100,
+                                                bottom: 5,
+                                                top: 5,
+                                                left: 2),
+                                        padding: EdgeInsets.all(13),
+                                        child: Text(
+                                          mess,
+                                          textAlign:
                                               username == widget.user.userFrom
+                                                  ? TextAlign.right
+                                                  : TextAlign.left,
+                                          style: TextStyle(
+                                              color: username ==
+                                                      widget.user.userFrom
                                                   ? Colors.white
                                                   : Colors.black),
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: username == widget.user.userFrom
-                                          ? Colors.teal[300]
-                                          : Colors.blueGrey[100],
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                    ));
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color:
+                                              username == widget.user.userFrom
+                                                  ? Colors.teal[300]
+                                                  : Colors.blueGrey[100],
+                                          borderRadius: username ==
+                                                  widget.user.userFrom
+                                              ? BorderRadius.only(
+                                                  topLeft: Radius.circular(18),
+                                                  bottomLeft:
+                                                      Radius.circular(18),
+                                                  bottomRight:
+                                                      Radius.circular(18),
+                                                )
+                                              : BorderRadius.only(
+                                                  topRight: Radius.circular(18),
+                                                  bottomLeft:
+                                                      Radius.circular(18),
+                                                  bottomRight:
+                                                      Radius.circular(18),
+                                                ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                } else if (mess != "") {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        username == widget.user.userFrom
+                                            ? CrossAxisAlignment.end
+                                            : CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        margin: username == widget.user.userFrom
+                                            ? EdgeInsets.only(
+                                                right: 2,
+                                                bottom: 5,
+                                                top: 5,
+                                                left: 100)
+                                            : EdgeInsets.only(
+                                                right: 100,
+                                                bottom: 5,
+                                                top: 5,
+                                                left: 2),
+                                        padding: EdgeInsets.all(13),
+                                        child: Text(
+                                          mess,
+                                          textAlign:
+                                              username == widget.user.userFrom
+                                                  ? TextAlign.right
+                                                  : TextAlign.left,
+                                          style: TextStyle(
+                                              color: username ==
+                                                      widget.user.userFrom
+                                                  ? Colors.white
+                                                  : Colors.black),
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color:
+                                              username == widget.user.userFrom
+                                                  ? Colors.teal[300]
+                                                  : Colors.blueGrey[100],
+                                          borderRadius: username ==
+                                                  widget.user.userFrom
+                                              ? BorderRadius.only(
+                                                  topLeft: Radius.circular(18),
+                                                  bottomLeft:
+                                                      Radius.circular(18),
+                                                  bottomRight:
+                                                      Radius.circular(18),
+                                                )
+                                              : BorderRadius.only(
+                                                  topRight: Radius.circular(18),
+                                                  bottomLeft:
+                                                      Radius.circular(18),
+                                                  bottomRight:
+                                                      Radius.circular(18),
+                                                ),
+                                        ),
+                                      ),
+                                      Column(
+                                        children: [
+                                          image != null
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25),
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.push(context,
+                                                            MaterialPageRoute(
+                                                                builder: (_) {
+                                                          return DetailScreen(
+                                                              image);
+                                                        }));
+                                                      },
+                                                      child: Hero(
+                                                        tag: "Image",
+                                                        child: Image.network(
+                                                            'https://wisatakuapps.com/kf_api/kfonline/upload_mess/' +
+                                                                image
+                                                                    .toString(),
+                                                            height: 180,
+                                                            fit: BoxFit.fill),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container()
+                                        ],
+                                      )
+                                    ],
+                                  );
+                                } else {
+                                  return Column(
+                                    crossAxisAlignment:
+                                        username == widget.user.userFrom
+                                            ? CrossAxisAlignment.end
+                                            : CrossAxisAlignment.start,
+                                    children: [
+                                      image != null
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(25),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(context,
+                                                        MaterialPageRoute(
+                                                            builder: (_) {
+                                                      return DetailScreen(
+                                                          image);
+                                                    }));
+                                                  },
+                                                  child: Hero(
+                                                    tag: "Image",
+                                                    child: Image.network(
+                                                        'https://wisatakuapps.com/kf_api/kfonline/upload_mess/' +
+                                                            image.toString(),
+                                                        height: 180,
+                                                        fit: BoxFit.fill),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          : Container()
+                                    ],
+                                  );
+                                }
                               },
                             ),
                           );
@@ -219,55 +444,133 @@ class _DetailChatState extends State<DetailChat> {
                         }
                       },
                     ),
-                    Divider(
-                      color: Colors.teal[800],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
+                    Container(
+                      margin: EdgeInsets.all(15.0),
+                      height: 63,
                       child: Row(
                         children: <Widget>[
                           Expanded(
-                            child: TextField(
-                                controller: _ctrlMess,
-                                decoration: new InputDecoration.collapsed(
-                                    hintText: "  Tulis Pesan  "),
-                                style: TextStyle(fontSize: 18.0)),
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                child: IconButton(
-                                    icon: Icon(
-                                      Icons.image,
-                                      color: Colors.teal[300],
-                                    ),
-                                    onPressed: () {
-                                      myAlert();
-                                    }),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(35.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                      offset: Offset(0, 2),
+                                      blurRadius: 2,
+                                      color: Colors.grey)
+                                ],
                               ),
-                              Container(
-                                child: IconButton(
-                                    icon: Icon(
-                                      Icons.send,
-                                      color: Colors.teal[300],
+                              child: Row(
+                                children: <Widget>[
+                                  IconButton(
+                                      icon: Icon(Icons.photo_camera,
+                                          color: Colors.teal),
+                                      onPressed: () {
+                                        pilihCamera();
+                                      }),
+                                  Expanded(
+                                    child: TextField(
+                                      controller: _content,
+                                      decoration: InputDecoration(
+                                          hintText: "Tulis Pesan...",
+                                          border: InputBorder.none),
                                     ),
-                                    onPressed: () async {
-                                      String content = _ctrlMess.text.trim();
-
-                                      if (content.isNotEmpty) {
-                                        var res = await _sendMess(content);
-                                        print(res);
-                                        _ctrlMess.text = "";
-                                      } else {
-                                        print("empty");
-                                      }
-                                    }),
+                                  ),
+                                  // IconButton(
+                                  //   icon: Icon(Icons.photo_camera),
+                                  //   onPressed: () {},
+                                  // ),
+                                  // IconButton(
+                                  //   icon: Icon(Icons.attach_file),
+                                  //   onPressed: () {},
+                                  // )
+                                ],
                               ),
-                            ],
+                            ),
                           ),
+                          SizedBox(width: 15),
+                          Container(
+                            padding: const EdgeInsets.all(15.0),
+                            decoration: BoxDecoration(
+                                color: Colors.teal, shape: BoxShape.circle),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.send,
+                                color: Colors.white,
+                              ),
+                              onPressed: () async {
+                                if (_content.text != "" && _imageFile != null) {
+                                  await _kirimpesan();
+                                  _content.text = "";
+                                  _imageFile = null;
+                                } else if (_content.text != "" &&
+                                    _imageFile == null) {
+                                  await _kirimText();
+                                  _content.text = "";
+                                  _imageFile = null;
+                                } else if (_content.text == "" &&
+                                    _imageFile != null) {
+                                  await _kirimGambar();
+                                  _content.text = "";
+                                  _imageFile = null;
+                                }
+                                // } else {
+                                //   print("empty");
+                                // }
+                              },
+                            ),
+                          )
                         ],
                       ),
                     )
+                    // Padding(
+                    //   padding: const EdgeInsets.only(bottom: 20.0),
+                    //   child: Row(
+                    //     children: <Widget>[
+                    //       Expanded(
+                    //         child: TextField(
+                    //             controller: _content,
+                    //             decoration: new InputDecoration.collapsed(
+                    //                 hintText: "  Tulis Pesan  "),
+                    //             style: TextStyle(fontSize: 18.0)),
+                    //       ),
+                    //       Row(
+                    //         children: [
+                    //           Container(
+                    //             child: IconButton(
+                    //                 icon: Icon(
+                    //                   Icons.image,
+                    //                   color: Colors.teal[300],
+                    //                 ),
+                    //                 onPressed: () {
+                    //                   pilihCamera();
+                    //                 }),
+                    //           ),
+                    //           Container(
+                    //             child: IconButton(
+                    //                 icon: Icon(
+                    //                   Icons.send,
+                    //                   color: Colors.teal[300],
+                    //                 ),
+                    //                 onPressed: () async {
+                    //                   String content = _content.text.trim();
+
+                    //                   if (content.isNotEmpty) {
+                    //                     var res = await _kirimpesan();
+                    //                     print(res);
+                    //                     _content.text = "";
+                    //                   } else {
+                    //                     print("empty");
+                    //                   }
+                    //                   // ignore: deprecated_member_use
+                    //                 }),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ],
+                    //   ),
+                    // )
                   ],
                 );
               } else {
@@ -294,21 +597,36 @@ class _DetailChatState extends State<DetailChat> {
       'username': widget.user.userFrom,
       'email': '$email',
       'password': '$password',
-      'user_to': widget.userTo.userTo
+      'user_to': widget.userTo.userTo,
     });
     var jsonx = json.decode(res.body);
-
+    print(widget.user.userFrom);
+    print('$email');
+    print('$password');
     return jsonx;
   }
+}
 
-  _sendMess(String content) async {
-    var res = await http.post(BaseUrl.sendMess, body: {
-      'email': '$email',
-      'password': '$password',
-      'username': widget.user.userFrom,
-      'user_to': widget.userTo.userTo,
-      'content': content,
-    });
-    return res.body;
+class DetailScreen extends StatelessWidget {
+  final String image;
+  DetailScreen(this.image);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Center(
+          child: Hero(
+            tag: 'Image',
+            child: Image.network(
+                'https://wisatakuapps.com/kf_api/kfonline/upload_mess/' +
+                    image.toString(),
+                fit: BoxFit.fill),
+          ),
+        ),
+      ),
+    );
   }
 }
