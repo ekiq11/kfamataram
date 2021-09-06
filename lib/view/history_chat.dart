@@ -1,3 +1,5 @@
+import 'package:http/http.dart' as http;
+import 'package:kf_online/modals/data_api.dart';
 import 'package:kf_online/modals/detail.dart';
 import 'package:kf_online/modals/history.dart';
 import 'package:kf_online/services/chat_services.dart';
@@ -103,16 +105,37 @@ class _HistoryChatState extends State<HistoryChat> {
                 itemBuilder: (context, index) {
                   return Container(
                       child: InkWell(
-                    onTap: () {
+                    onTap: () async {
+                      await http.post(
+                        BaseUrl.readMess +
+                            'from=' +
+                            _historyChat[index].userFrom +
+                            '&to=' +
+                            _historyChat[index].userTo,
+                      );
+                      print(
+                        BaseUrl.readMess +
+                            'from=' +
+                            _historyChat[index].userFrom +
+                            '&to=' +
+                            _historyChat[index].userTo,
+                      );
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DetailChat(
-                                  user: Chat(_historyChat[index].userFrom,
-                                      _historyChat[index].userTo),
-                                  userTo: Chat(
-                                      _historyChat[index].userFrom.toString(),
-                                      _historyChat[index].userTo.toString()))));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailChat(
+                            user: Chat(
+                                _historyChat[index].userFrom,
+                                _historyChat[index].userTo,
+                                _historyChat[index].newMessage),
+                            userTo: Chat(
+                              _historyChat[index].userFrom.toString(),
+                              _historyChat[index].userTo.toString(),
+                              _historyChat[index].newMessage.toString(),
+                            ),
+                          ),
+                        ),
+                      );
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(1.0),
@@ -120,7 +143,11 @@ class _HistoryChatState extends State<HistoryChat> {
                           ? ListTile(
                               leading: Icon(Icons.chat_bubble_outlined,
                                   color: Colors.orange[300], size: 30.0),
-                              title: Text(_historyChat[index].userFrom,
+                              title: Text(
+                                  _historyChat[index].userFrom +
+                                      " (" +
+                                      _historyChat[index].newMessage +
+                                      " Pesan Baru)",
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                       fontSize: 18.0,

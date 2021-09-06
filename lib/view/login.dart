@@ -15,19 +15,21 @@ class _LoginPageState extends State<LoginPage> {
   String password;
   String username;
   String fullName;
+  String isOnline;
 
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
   final formKey = new GlobalKey<FormState>();
 
-  savePref(
-      String username, String fullName, String email, String password) async {
+  savePref(String username, String fullName, String email, String password,
+      isOnline) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setString("username", username);
       preferences.setString("full_name", fullName);
       preferences.setString("email", email);
       preferences.setString("password", password);
+      preferences.setString("password", isOnline);
     });
   }
 

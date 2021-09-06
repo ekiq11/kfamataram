@@ -19,4 +19,8 @@ class BaseUrl {
       "https://wisatakuapps.com/kf_api/kfonline/api/lupa_pass.php";
   static String historyChat =
       "https://wisatakuapps.com/kf_api/kfonline/api/get_history_chat.php?user=";
+  static String readMess =
+      "https://wisatakuapps.com/kf_api/kfonline/api/read_message.php?";
+  static String logOut =
+      "https://wisatakuapps.com/kf_api/kfonline/api/logout.php?";
 }

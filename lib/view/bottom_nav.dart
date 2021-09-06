@@ -38,7 +38,7 @@ class BottomNavState extends State<BottomNav> {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.chat_outlined), label: 'Chat'),
+                icon: Icon(Icons.chat_bubble), label: 'Chat'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.location_on), label: 'Location'),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),

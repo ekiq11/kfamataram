@@ -1,4 +1,4 @@
 class Chat {
-  String userTo, userFrom;
-  Chat(this.userTo, this.userFrom);
+  String userTo, userFrom, newMessage;
+  Chat(this.userTo, this.userFrom, this.newMessage);
 }

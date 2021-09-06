@@ -15,10 +15,15 @@ class UserLogin extends StatefulWidget {
 
 class _UserLoginState extends State<UserLogin> {
   var user = [];
-  String username = "", fullName = "", email = "", password = "", image = "";
+  String username = "",
+      fullName = "",
+      email = "",
+      password = "",
+      image = "",
+      isOnline = "";
 
   savePref(String username, String fullName, String email, String password,
-      String image) async {
+      String image, isOnline) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setString("username", username);
@@ -26,6 +31,7 @@ class _UserLoginState extends State<UserLogin> {
       preferences.setString("email", email);
       preferences.setString("password", password);
       preferences.setString("image", image);
+      preferences.setString("is_online", isOnline);
     });
   }
 
@@ -163,19 +169,64 @@ class _UserLoginState extends State<UserLogin> {
                                                           MainAxisAlignment.end,
                                                       children: [
                                                         Flexible(
-                                                          child: Text(
-                                                              '\n                               Apt. ' +
-                                                                  lst[index][
-                                                                          'username']
-                                                                      .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      17.0,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400,
-                                                                  fontFamily:
-                                                                      'Raleway')),
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              Text(
+                                                                  '\n                               Apt. ' +
+                                                                      lst[index]
+                                                                              [
+                                                                              'username']
+                                                                          .toString(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          17.0,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      fontFamily:
+                                                                          'Raleway')),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                children: [
+                                                                  lst[index]['is_online']
+                                                                              .toString() ==
+                                                                          'y'
+                                                                      ? Icon(
+                                                                          Icons
+                                                                              .lens,
+                                                                          color: Colors
+                                                                              .teal,
+                                                                          size:
+                                                                              7.0)
+                                                                      : Icon(
+                                                                          Icons
+                                                                              .lens,
+                                                                          color: Colors
+                                                                              .grey,
+                                                                          size:
+                                                                              7.0),
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .end,
+                                                                    children: [
+                                                                      lst[index]['is_online'].toString() ==
+                                                                              'y'
+                                                                          ? Text(
+                                                                              " Online",
+                                                                              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w400, fontFamily: 'Raleway', color: Colors.teal))
+                                                                          : Text(" Offline", style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w800, fontFamily: 'Raleway', color: Colors.grey))
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              )
+                                                            ],
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
@@ -188,7 +239,7 @@ class _UserLoginState extends State<UserLogin> {
                                                     padding:
                                                         const EdgeInsets.only(
                                                             left: 70.0,
-                                                            top: 33.0),
+                                                            top: 15.0),
                                                     child: Padding(
                                                       padding:
                                                           const EdgeInsets.only(

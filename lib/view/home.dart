@@ -1,8 +1,6 @@
-import 'package:kf_online/view/bottom_nav.dart';
 import 'package:kf_online/view/botton_buttons.dart';
 import 'package:kf_online/view/explanation.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final List<ExplanationData> data = [
   ExplanationData(
@@ -33,48 +31,6 @@ class _HomePageState extends State<HomePage> /*with ChangeNotifier*/ {
   final _controller = PageController();
 
   int _currentIndex = 0;
-
-  String username;
-  String fullName;
-  String email;
-  String password;
-
-  savePref(
-      String username, String fullName, String email, String password) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      preferences.setString("username", username);
-      preferences.setString("full_name", fullName);
-      preferences.setString("email", email);
-      preferences.setString("password", password);
-    });
-  }
-
-  getPref() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      username = preferences.getString("username");
-      fullName = preferences.getString("fullName");
-      email = preferences.getString("email");
-      password = preferences.getString("password");
-      if (username != null) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context) {
-              return BottomNav();
-            },
-          ),
-        );
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getPref();
-    print(username);
-  }
 
   @override
   Widget build(BuildContext context) {

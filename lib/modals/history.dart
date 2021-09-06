@@ -11,21 +11,17 @@ String chatUserToJson(List<ChatUser> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class ChatUser {
-  ChatUser({
-    this.userFrom,
-    this.userTo,
-  });
+  ChatUser({this.userFrom, this.userTo, this.newMessage});
 
   String userFrom;
   String userTo;
+  String newMessage;
 
   factory ChatUser.fromJson(Map<String, dynamic> json) => ChatUser(
-        userFrom: json["user_from"],
-        userTo: json["user_to"],
-      );
+      userFrom: json["user_from"],
+      userTo: json["user_to"],
+      newMessage: json["new_message"]);
 
-  Map<String, dynamic> toJson() => {
-        "user_from": userFrom,
-        "user_to": userTo,
-      };
+  Map<String, dynamic> toJson() =>
+      {"user_from": userFrom, "user_to": userTo, "new_message": newMessage};
 }

@@ -5,10 +5,12 @@ import 'package:kf_online/modals/data_api.dart';
 import 'package:kf_online/modals/detail.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:kf_online/view/detail_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart' as path;
 import 'package:async/async.dart';
 
+// ignore: must_be_immutable
 class DetailChat extends StatefulWidget {
   Chat user;
   Chat userTo;
@@ -380,7 +382,8 @@ class _DetailChatState extends State<DetailChat> {
                                                         }));
                                                       },
                                                       child: Hero(
-                                                        tag: "Image",
+                                                        tag: lst[index]
+                                                            ['image'],
                                                         child: Image.network(
                                                             'https://wisatakuapps.com/kf_api/kfonline/upload_mess/' +
                                                                 image
@@ -420,7 +423,7 @@ class _DetailChatState extends State<DetailChat> {
                                                     }));
                                                   },
                                                   child: Hero(
-                                                    tag: "Image",
+                                                    tag: lst[index]['image'],
                                                     child: Image.network(
                                                         'https://wisatakuapps.com/kf_api/kfonline/upload_mess/' +
                                                             image.toString(),
@@ -599,33 +602,9 @@ class _DetailChatState extends State<DetailChat> {
       'user_to': widget.userTo.userTo,
     });
     var jsonx = json.decode(res.body);
-    print(widget.user.userFrom);
-    print('$email');
-    print('$password');
+    // print(widget.user.userFrom);
+    // print('$email');
+    // print('$password');
     return jsonx;
-  }
-}
-
-class DetailScreen extends StatelessWidget {
-  final String image;
-  DetailScreen(this.image);
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Center(
-          child: Hero(
-            tag: 'Image',
-            child: Image.network(
-                'https://wisatakuapps.com/kf_api/kfonline/upload_mess/' +
-                    image.toString(),
-                fit: BoxFit.fill),
-          ),
-        ),
-      ),
-    );
   }
 }

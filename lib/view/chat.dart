@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:kf_online/view/detail_image.dart';
 import 'package:path/path.dart' as path;
 import 'package:image_picker/image_picker.dart';
 import 'package:kf_online/modals/data_api.dart';
@@ -415,7 +416,8 @@ class _ChatPageState extends State<ChatPage> {
                                                         }));
                                                       },
                                                       child: Hero(
-                                                        tag: "Image",
+                                                        tag: lst[index]
+                                                            ['image'],
                                                         child: Image.network(
                                                             'https://wisatakuapps.com/kf_api/kfonline/upload_mess/' +
                                                                 image
@@ -455,7 +457,7 @@ class _ChatPageState extends State<ChatPage> {
                                                     }));
                                                   },
                                                   child: Hero(
-                                                    tag: "Image",
+                                                    tag: lst[index]['image'],
                                                     child: Image.network(
                                                         'https://wisatakuapps.com/kf_api/kfonline/upload_mess/' +
                                                             image.toString(),
@@ -638,29 +640,5 @@ class _ChatPageState extends State<ChatPage> {
     print(widget.user.email);
     print(widget.user.password);
     return jsonx;
-  }
-}
-
-class DetailScreen extends StatelessWidget {
-  final String image;
-  DetailScreen(this.image);
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Center(
-          child: Hero(
-            tag: 'Image',
-            child: Image.network(
-                'https://wisatakuapps.com/kf_api/kfonline/upload_mess/' +
-                    image.toString(),
-                fit: BoxFit.fill),
-          ),
-        ),
-      ),
-    );
   }
 }

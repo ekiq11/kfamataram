@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:kf_online/modals/data_api.dart';
 import 'package:kf_online/view/edit_profile.dart';
 import 'package:kf_online/view/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,16 +35,6 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  logOut() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    await preferences.clear();
-    setState(() {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
-          (Route<dynamic> route) => false);
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -49,6 +42,14 @@ class _ProfileState extends State<Profile> {
   }
 
   var user = [];
+
+  logOut() async {
+    final response =
+        await http.post(BaseUrl.logOut + 'username=' + '$username', body: {});
+    print('$username');
+    jsonDecode(response.body);
+    print('$username' + " Berhasil Loguot");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,8 +144,15 @@ class _ProfileState extends State<Profile> {
                 padding: const EdgeInsets.all(20.0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(primary: Colors.orange),
-                  onPressed: () {
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    prefs.remove('$username');
                     logOut();
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext ctx) => LoginPage()));
                   },
                   child: ListTile(
                     leading: Icon(

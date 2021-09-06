@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kf_online/view/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BottomButtons extends StatelessWidget {
   final int currentIndex;
@@ -9,6 +10,14 @@ class BottomButtons extends StatelessWidget {
   const BottomButtons(
       {Key key, this.currentIndex, this.dataLength, this.controller})
       : super(key: key);
+
+  _storeOnboardInfo() async {
+    print("Shared pref called");
+    int isViewed = 0;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('onBoard', isViewed);
+    print(prefs.getInt('onBoard'));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +33,7 @@ class BottomButtons extends StatelessWidget {
                     ),
                     child: ElevatedButton(
                         onPressed: () {
+                          _storeOnboardInfo();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
