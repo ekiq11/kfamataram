@@ -22,18 +22,6 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController passwordController = new TextEditingController();
   final formKey = new GlobalKey<FormState>();
 
-  savePref(String username, String fullName, String email, String password,
-      isOnline) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      preferences.setString("username", username);
-      preferences.setString("full_name", fullName);
-      preferences.setString("email", email);
-      preferences.setString("password", password);
-      preferences.setString("password", isOnline);
-    });
-  }
-
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
@@ -45,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (BuildContext context) {
-              return UserLogin();
+              return BottomNav();
             },
           ),
         );

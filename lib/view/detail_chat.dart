@@ -190,7 +190,7 @@ class _DetailChatState extends State<DetailChat> {
                                 Navigator.pop(context);
                               },
                               icon: const Icon(Icons.arrow_back_ios_new,
-                                  size: 18),
+                                  size: 14),
                               color: Colors.teal)),
                     ),
                     Row(

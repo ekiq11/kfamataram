@@ -24,17 +24,6 @@ class _ProfileState extends State<Profile> {
     });
   }
 
-  savePref(
-      String username, String fullName, String email, String password) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      preferences.setString("username", username);
-      preferences.setString("full_name", fullName);
-      preferences.setString("email", email);
-      preferences.setString("password", password);
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -145,10 +134,14 @@ class _ProfileState extends State<Profile> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(primary: Colors.orange),
                   onPressed: () async {
+                    logOut();
                     SharedPreferences prefs =
                         await SharedPreferences.getInstance();
-                    prefs.remove('$username');
-                    logOut();
+                    prefs.remove('username');
+                    prefs.remove('email');
+                    prefs.remove('fullName');
+                    prefs.remove('password');
+
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(

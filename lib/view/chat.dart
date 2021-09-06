@@ -225,7 +225,7 @@ class _ChatPageState extends State<ChatPage> {
                                 Navigator.pop(context);
                               },
                               icon: const Icon(Icons.arrow_back_ios_new,
-                                  size: 18),
+                                  size: 14),
                               color: Colors.teal)),
                     ),
                     Row(
@@ -507,11 +507,15 @@ class _ChatPageState extends State<ChatPage> {
                                         pilihCamera();
                                       }),
                                   Expanded(
-                                    child: TextField(
-                                      controller: _content,
-                                      decoration: InputDecoration(
-                                          hintText: "Tulis Pesan...",
-                                          border: InputBorder.none),
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 15.0),
+                                      child: TextField(
+                                        controller: _content,
+                                        decoration: InputDecoration(
+                                            hintText: "Tulis Pesan...",
+                                            border: InputBorder.none),
+                                      ),
                                     ),
                                   ),
                                   // IconButton(
