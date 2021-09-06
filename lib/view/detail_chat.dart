@@ -195,7 +195,7 @@ class _DetailChatState extends State<DetailChat> {
                       children: [
                         Container(
                           child: Text(
-                            "Apt.  " + widget.userTo.userFrom,
+                            widget.userTo.userTo,
                             style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.teal[800],
@@ -446,7 +446,7 @@ class _DetailChatState extends State<DetailChat> {
                     ),
                     Container(
                       margin: EdgeInsets.all(15.0),
-                      height: 63,
+                      height: 50,
                       child: Row(
                         children: <Widget>[
                           Expanded(
@@ -465,7 +465,7 @@ class _DetailChatState extends State<DetailChat> {
                                 children: <Widget>[
                                   IconButton(
                                       icon: Icon(Icons.photo_camera,
-                                          color: Colors.teal),
+                                          color: Colors.grey[500]),
                                       onPressed: () {
                                         pilihCamera();
                                       }),
@@ -491,7 +491,6 @@ class _DetailChatState extends State<DetailChat> {
                           ),
                           SizedBox(width: 15),
                           Container(
-                            padding: const EdgeInsets.all(15.0),
                             decoration: BoxDecoration(
                                 color: Colors.teal, shape: BoxShape.circle),
                             child: IconButton(
