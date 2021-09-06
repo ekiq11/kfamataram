@@ -3,6 +3,7 @@ import 'package:kf_online/modals/commons.dart';
 import 'package:kf_online/view/bottom_nav.dart';
 import 'package:kf_online/view/daftar.dart';
 import 'package:kf_online/view/lupa_pass.dart';
+import 'package:kf_online/view/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -31,6 +32,32 @@ class _LoginPageState extends State<LoginPage> {
       preferences.setString("password", password);
       preferences.setString("password", isOnline);
     });
+  }
+
+  getPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      username = preferences.getString("username");
+      fullName = preferences.getString("fullName");
+      email = preferences.getString("email");
+      password = preferences.getString("password");
+      if (username != null) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) {
+              return UserLogin();
+            },
+          ),
+        );
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPref();
+    print(username);
   }
 
   @override

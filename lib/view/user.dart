@@ -220,7 +220,7 @@ class _UserLoginState extends State<UserLogin> {
                                                                           ? Text(
                                                                               " Online",
                                                                               style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w400, fontFamily: 'Raleway', color: Colors.teal))
-                                                                          : Text(" Offline", style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w800, fontFamily: 'Raleway', color: Colors.grey))
+                                                                          : Text(" Offline", style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w400, fontFamily: 'Raleway', color: Colors.grey))
                                                                     ],
                                                                   ),
                                                                 ],

@@ -6,10 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 int isviewed;
 void main() async {
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-  ));
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   isviewed = prefs.getInt('onBoard');
   runApp(App());
@@ -62,7 +61,8 @@ class App extends StatelessWidget {
       ),
       home: isviewed == 0
           ? LoginPage()
-          : SafeArea(bottom: false, child: Scaffold(body: HomePage())),
+          : SafeArea(
+              bottom: false, top: false, child: Scaffold(body: HomePage())),
       debugShowCheckedModeBanner: false,
     );
   }
