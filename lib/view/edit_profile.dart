@@ -266,7 +266,7 @@ class _EditProfileState extends State<EditProfile> {
               }
             },
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.84,
+              width: MediaQuery.of(context).size.width * 0.83,
               height: MediaQuery.of(context).size.height * 0.07,
               child: Center(
                 child: Text(

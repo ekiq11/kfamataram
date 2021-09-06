@@ -1,26 +1,25 @@
 class BaseUrl {
-  static String login =
-      "https://wisatakuapps.com/kf_api/kfonline/api/login.php";
+  static String login = "http://kfonline.aksestryout.com/akses/api/login.php";
   static String getUser =
-      "https://wisatakuapps.com/kf_api/kfonline/api/get_user.php";
+      "http://kfonline.aksestryout.com/akses/api/get_user.php";
   static String register =
-      "https://wisatakuapps.com/kf_api/kfonline/api/register.php";
+      "http://kfonline.aksestryout.com/akses/api/register.php";
   static String getMess =
-      "https://wisatakuapps.com/kf_api/kfonline/api/get_mess.php";
+      "http://kfonline.aksestryout.com/akses/api/get_mess.php";
   static String sendMess =
-      "https://wisatakuapps.com/kf_api/kfonline/api/send_mess.php";
+      "http://kfonline.aksestryout.com/akses/api/send_mess.php";
   static String lokasi =
-      "https://wisatakuapps.com/kf_api/kfonline/api/get_locations.php";
+      "http://kfonline.aksestryout.com/akses/api/get_locations.php";
   static String dataDokter =
-      "https://wisatakuapps.com/kf_api/kfonline/api/get_dokter.php";
+      "http://kfonline.aksestryout.com/akses/api/get_dokter.php";
   static String updateUser =
-      "https://wisatakuapps.com/kf_api/kfonline/api/update_profil.php?username=";
+      "http://kfonline.aksestryout.com/akses/api/update_profil.php?username=";
   static String lupaPassword =
-      "https://wisatakuapps.com/kf_api/kfonline/api/lupa_pass.php";
+      "http://kfonline.aksestryout.com/akses/api/lupa_pass.php";
   static String historyChat =
-      "https://wisatakuapps.com/kf_api/kfonline/api/get_history_chat.php?user=";
+      "http://kfonline.aksestryout.com/akses/api/get_history_chat.php?user=";
   static String readMess =
-      "https://wisatakuapps.com/kf_api/kfonline/api/read_message.php?";
+      "http://kfonline.aksestryout.com/akses/api/read_message.php?";
   static String logOut =
-      "https://wisatakuapps.com/kf_api/kfonline/api/logout.php?";
+      "http://kfonline.aksestryout.com/akses/api/logout.php?";
 }

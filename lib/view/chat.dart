@@ -420,8 +420,9 @@ class _ChatPageState extends State<ChatPage> {
                                                         tag: lst[index]
                                                             ['image'],
                                                         child: Image.network(
-                                                            'https://wisatakuapps.com/kf_api/kfonline/upload_mess/' +
-                                                                image
+                                                            'http://kfonline.aksestryout.com/akses/upload_mess/' +
+                                                                lst[index][
+                                                                        'image']
                                                                     .toString(),
                                                             height: 180,
                                                             fit: BoxFit.fill),
@@ -460,8 +461,9 @@ class _ChatPageState extends State<ChatPage> {
                                                   child: Hero(
                                                     tag: lst[index]['image'],
                                                     child: Image.network(
-                                                        'https://wisatakuapps.com/kf_api/kfonline/upload_mess/' +
-                                                            image.toString(),
+                                                        'http://kfonline.aksestryout.com/akses/upload_mess/' +
+                                                            lst[index]['image']
+                                                                .toString(),
                                                         height: 180,
                                                         fit: BoxFit.fill),
                                                   ),

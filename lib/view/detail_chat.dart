@@ -386,8 +386,9 @@ class _DetailChatState extends State<DetailChat> {
                                                         tag: lst[index]
                                                             ['image'],
                                                         child: Image.network(
-                                                            'https://wisatakuapps.com/kf_api/kfonline/upload_mess/' +
-                                                                image
+                                                            'http://kfonline.aksestryout.com/akses/upload_mess/' +
+                                                                lst[index][
+                                                                        'image']
                                                                     .toString(),
                                                             height: 180,
                                                             fit: BoxFit.fill),
@@ -426,8 +427,9 @@ class _DetailChatState extends State<DetailChat> {
                                                   child: Hero(
                                                     tag: lst[index]['image'],
                                                     child: Image.network(
-                                                        'https://wisatakuapps.com/kf_api/kfonline/upload_mess/' +
-                                                            image.toString(),
+                                                        'http://kfonline.aksestryout.com/akses/upload_mess/' +
+                                                            lst[index]['image']
+                                                                .toString(),
                                                         height: 180,
                                                         fit: BoxFit.fill),
                                                   ),
@@ -474,11 +476,15 @@ class _DetailChatState extends State<DetailChat> {
                                         pilihCamera();
                                       }),
                                   Expanded(
-                                    child: TextField(
-                                      controller: _content,
-                                      decoration: InputDecoration(
-                                          hintText: "Tulis Pesan...",
-                                          border: InputBorder.none),
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 15.0),
+                                      child: TextField(
+                                        controller: _content,
+                                        decoration: InputDecoration(
+                                            hintText: "Tulis Pesan...",
+                                            border: InputBorder.none),
+                                      ),
                                     ),
                                   ),
                                   // IconButton(

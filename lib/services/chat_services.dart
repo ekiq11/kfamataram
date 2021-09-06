@@ -3,7 +3,7 @@ import 'package:kf_online/modals/history.dart';
 
 class ChatServices {
   static const String url =
-      'https://wisatakuapps.com/kf_api/kfonline/api/get_history_chat.php?user=';
+      'http://kfonline.aksestryout.com/akses/api/get_history_chat.php?user=';
   static Future<List<ChatUser>> getHistory(String username) async {
     try {
       final response = await http.get(url + username);

@@ -3,7 +3,7 @@ import 'package:kf_online/modals/map_json.dart';
 
 class LokasiServices {
   static const String url =
-      'https://wisatakuapps.com/kf_api/kfonline/api/get_locations.php';
+      'http://kfonline.aksestryout.com/akses/api/get_locations.php';
   static Future<List<Lokasi>> getLokasi() async {
     try {
       final response = await http.get(url);

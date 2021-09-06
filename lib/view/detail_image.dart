@@ -14,7 +14,7 @@ class DetailScreen extends StatelessWidget {
           child: Hero(
             tag: 'Pesan Gambar',
             child: Image.network(
-                'https://wisatakuapps.com/kf_api/kfonline/upload_mess/' +
+                'http://kfonline.aksestryout.com/akses/upload_mess/' +
                     image.toString(),
                 fit: BoxFit.fill),
           ),

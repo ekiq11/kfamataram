@@ -70,97 +70,100 @@ class _HistoryChatState extends State<HistoryChat> {
   var user = [];
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: Scaffold(
-        appBar: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.white,
-            elevation: 0,
-            toolbarHeight: 80.0,
-            title: new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  'assets/asset4.png',
-                  fit: BoxFit.contain,
-                  height: 20,
-                ),
-                Container(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset(
-                      'assets/asset5.png',
-                      fit: BoxFit.contain,
-                      height: 30,
-                    ))
-              ],
-            )),
-        body: Container(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 10.0),
-            child: RefreshIndicator(
-              onRefresh: _refresh,
-              key: _onRefresh,
-              child: ListView.builder(
-                itemCount: _historyChat == null ? 0 : _historyChat.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                      child: InkWell(
-                    onTap: () async {
-                      await http.post(
-                        BaseUrl.readMess +
-                            'from=' +
-                            _historyChat[index].userFrom +
-                            '&to=' +
-                            _historyChat[index].userTo,
-                      );
-                      print(
-                        BaseUrl.readMess +
-                            'from=' +
-                            _historyChat[index].userFrom +
-                            '&to=' +
-                            _historyChat[index].userTo,
-                      );
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailChat(
-                            user: Chat(
-                                _historyChat[index].userFrom,
-                                _historyChat[index].userTo,
-                                _historyChat[index].newMessage),
-                            userTo: Chat(
-                              _historyChat[index].userFrom.toString(),
-                              _historyChat[index].userTo.toString(),
-                              _historyChat[index].newMessage.toString(),
+    return Container(
+      color: Colors.white,
+      child: SafeArea(
+        bottom: false,
+        child: Scaffold(
+          appBar: AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.white,
+              elevation: 0,
+              toolbarHeight: 80.0,
+              title: new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.asset(
+                    'assets/asset4.png',
+                    fit: BoxFit.contain,
+                    height: 20,
+                  ),
+                  Container(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.asset(
+                        'assets/asset5.png',
+                        fit: BoxFit.contain,
+                        height: 30,
+                      ))
+                ],
+              )),
+          body: Container(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: RefreshIndicator(
+                onRefresh: _refresh,
+                key: _onRefresh,
+                child: ListView.builder(
+                  itemCount: _historyChat == null ? 0 : _historyChat.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                        child: InkWell(
+                      onTap: () async {
+                        await http.post(
+                          BaseUrl.readMess +
+                              'from=' +
+                              _historyChat[index].userFrom +
+                              '&to=' +
+                              _historyChat[index].userTo,
+                        );
+                        print(
+                          BaseUrl.readMess +
+                              'from=' +
+                              _historyChat[index].userFrom +
+                              '&to=' +
+                              _historyChat[index].userTo,
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailChat(
+                              user: Chat(
+                                  _historyChat[index].userFrom,
+                                  _historyChat[index].userTo,
+                                  _historyChat[index].newMessage),
+                              userTo: Chat(
+                                _historyChat[index].userFrom.toString(),
+                                _historyChat[index].userTo.toString(),
+                                _historyChat[index].newMessage.toString(),
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: username != _historyChat[index].userFrom
-                          ? ListTile(
-                              leading: Icon(Icons.chat_bubble_outlined,
-                                  color: Colors.orange[300], size: 30.0),
-                              title: Text(
-                                  _historyChat[index].userFrom +
-                                      " (" +
-                                      _historyChat[index].newMessage +
-                                      " Pesan Baru)",
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w500)),
-                            )
-                          : Text("Refresh",
-                              style: TextStyle(
-                                fontSize: 0.0,
-                              )),
-                    ),
-                  ));
-                },
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: username != _historyChat[index].userFrom
+                            ? ListTile(
+                                leading: Icon(Icons.chat_bubble_outlined,
+                                    color: Colors.orange[300], size: 30.0),
+                                title: Text(
+                                    _historyChat[index].userFrom +
+                                        " (" +
+                                        _historyChat[index].newMessage +
+                                        " Pesan Baru)",
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.w500)),
+                              )
+                            : Text("Refresh",
+                                style: TextStyle(
+                                  fontSize: 0.0,
+                                )),
+                      ),
+                    ));
+                  },
+                ),
               ),
             ),
           ),

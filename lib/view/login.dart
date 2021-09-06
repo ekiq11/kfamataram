@@ -21,6 +21,18 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
   final formKey = new GlobalKey<FormState>();
+  savePref(String username, String fullName, String email, String password,
+      String image, isOnline) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      preferences.setString("username", username);
+      preferences.setString("full_name", fullName);
+      preferences.setString("email", email);
+      preferences.setString("password", password);
+      preferences.setString("image", image);
+      preferences.setString("is_online", isOnline);
+    });
+  }
 
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -217,7 +229,7 @@ class _LoginPageState extends State<LoginPage> {
               }
             },
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.84,
+              width: MediaQuery.of(context).size.width * 0.83,
               height: MediaQuery.of(context).size.height * 0.07,
               child: Center(
                 child: Text(
