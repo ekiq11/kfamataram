@@ -150,6 +150,7 @@ class _DetailChatState extends State<DetailChat> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      bottom: false,
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,

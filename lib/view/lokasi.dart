@@ -25,6 +25,7 @@ class _LokasiApotekState extends State<LokasiApotek> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      bottom: false,
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,

@@ -79,6 +79,7 @@ class _LupaPasswordsState extends State<LupaPasswords> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      bottom: false,
       child: Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,

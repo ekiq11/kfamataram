@@ -71,6 +71,7 @@ class _HistoryChatState extends State<HistoryChat> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      bottom: false,
       child: Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
