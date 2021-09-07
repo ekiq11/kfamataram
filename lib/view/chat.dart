@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:kf_online/view/detail_image.dart';
@@ -39,6 +40,12 @@ class _ChatPageState extends State<ChatPage> {
       email = preferences.getString("email");
       password = preferences.getString("password");
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPref();
   }
 
   _kirimText() async {
@@ -178,9 +185,10 @@ class _ChatPageState extends State<ChatPage> {
   //               ],
   //             ),
   //           ),
-  //         );
+  //         );getPref();
   //       });
   // }
+  ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -269,6 +277,7 @@ class _ChatPageState extends State<ChatPage> {
             builder: (context, snap) {
               if (snap.hasData) {
                 var temp = snap.data as Future<List<dynamic>>;
+
                 return Column(
                   children: <Widget>[
                     FutureBuilder(
@@ -280,69 +289,84 @@ class _ChatPageState extends State<ChatPage> {
                             child: ListView.builder(
                               primary: false,
                               shrinkWrap: true,
-                              itemCount: lst.length,
+                              controller: _scrollController,
+                              itemCount: lst.length + 1,
                               itemBuilder: (context, index) {
+                                if (index == lst.length) {
+                                  return Container(height: 70.0);
+                                }
                                 var username = lst[index]['user'];
                                 var image = lst[index]['image'];
                                 var mess = lst[index]['content'].toString();
                                 if (image == "") {
-                                  return Column(
-                                    crossAxisAlignment:
-                                        username == widget.user.username
-                                            ? CrossAxisAlignment.end
-                                            : CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: username == widget.user.username
-                                            ? EdgeInsets.only(
-                                                right: 2,
-                                                bottom: 5,
-                                                top: 5,
-                                                left: 100)
-                                            : EdgeInsets.only(
-                                                right: 100,
-                                                bottom: 5,
-                                                top: 5,
-                                                left: 2),
-                                        padding: EdgeInsets.all(13),
-                                        child: Text(
-                                          mess,
-                                          textAlign:
+                                  return Container(
+                                    height: 70,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          username == widget.user.username
+                                              ? CrossAxisAlignment.end
+                                              : CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          margin:
                                               username == widget.user.username
-                                                  ? TextAlign.right
-                                                  : TextAlign.left,
-                                          style: TextStyle(
-                                              color: username ==
-                                                      widget.user.username
-                                                  ? Colors.white
-                                                  : Colors.black),
+                                                  ? EdgeInsets.only(
+                                                      right: 2,
+                                                      bottom: 5,
+                                                      top: 5,
+                                                      left: 100)
+                                                  : EdgeInsets.only(
+                                                      right: 100,
+                                                      bottom: 5,
+                                                      top: 5,
+                                                      left: 2),
+                                          padding: EdgeInsets.all(13),
+                                          child: Text(
+                                            mess,
+                                            textAlign:
+                                                username == widget.user.username
+                                                    ? TextAlign.right
+                                                    : TextAlign.left,
+                                            style: TextStyle(
+                                                color: username ==
+                                                        widget.user.username
+                                                    ? Colors.white
+                                                    : Colors.black),
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color:
+                                                username == widget.user.username
+                                                    ? Colors.teal[300]
+                                                    : Colors.blueGrey[100],
+                                            borderRadius:
+                                                username == widget.user.username
+                                                    ? BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(18),
+                                                        bottomLeft:
+                                                            Radius.circular(18),
+                                                        bottomRight:
+                                                            Radius.circular(18),
+                                                      )
+                                                    : BorderRadius.only(
+                                                        topRight:
+                                                            Radius.circular(18),
+                                                        bottomLeft:
+                                                            Radius.circular(18),
+                                                        bottomRight:
+                                                            Radius.circular(18),
+                                                      ),
+                                          ),
                                         ),
-                                        decoration: BoxDecoration(
-                                          color:
-                                              username == widget.user.username
-                                                  ? Colors.teal[300]
-                                                  : Colors.blueGrey[100],
-                                          borderRadius: username ==
-                                                  widget.user.username
-                                              ? BorderRadius.only(
-                                                  topLeft: Radius.circular(18),
-                                                  bottomLeft:
-                                                      Radius.circular(18),
-                                                  bottomRight:
-                                                      Radius.circular(18),
-                                                )
-                                              : BorderRadius.only(
-                                                  topRight: Radius.circular(18),
-                                                  bottomLeft:
-                                                      Radius.circular(18),
-                                                  bottomRight:
-                                                      Radius.circular(18),
-                                                ),
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   );
                                 } else if (mess != "") {
+                                  _scrollController.animateTo(
+                                      _scrollController
+                                          .position.maxScrollExtent,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.easeOut);
                                   return Column(
                                     crossAxisAlignment:
                                         username == widget.user.username
@@ -350,6 +374,7 @@ class _ChatPageState extends State<ChatPage> {
                                             : CrossAxisAlignment.start,
                                     children: [
                                       Container(
+                                        height: 70.0,
                                         margin: username == widget.user.username
                                             ? EdgeInsets.only(
                                                 right: 2,
@@ -514,6 +539,14 @@ class _ChatPageState extends State<ChatPage> {
                                       padding:
                                           const EdgeInsets.only(right: 15.0),
                                       child: TextField(
+                                        onTap: () {
+                                          _scrollController.animateTo(
+                                              _scrollController
+                                                  .position.maxScrollExtent,
+                                              duration:
+                                                  Duration(milliseconds: 300),
+                                              curve: Curves.easeOut);
+                                        },
                                         controller: _content,
                                         decoration: InputDecoration(
                                             hintText: "Tulis Pesan...",
@@ -545,19 +578,35 @@ class _ChatPageState extends State<ChatPage> {
                               onPressed: () async {
                                 if (_content.text != "" && _imageFile != null) {
                                   await _kirimpesan();
+                                  _scrollController.animateTo(
+                                      _scrollController
+                                          .position.maxScrollExtent,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.easeOut);
                                   _content.text = "";
                                   _imageFile = null;
                                 } else if (_content.text != "" &&
                                     _imageFile == null) {
                                   await _kirimText();
+                                  _scrollController.animateTo(
+                                      _scrollController
+                                          .position.maxScrollExtent,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.easeOut);
                                   _content.text = "";
                                   _imageFile = null;
                                 } else if (_content.text == "" &&
                                     _imageFile != null) {
                                   await _kirimGambar();
+                                  _scrollController.animateTo(
+                                      _scrollController
+                                          .position.maxScrollExtent,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.easeOut);
                                   _content.text = "";
                                   _imageFile = null;
                                 }
+
                                 // } else {
                                 //   print("empty");
                                 // }

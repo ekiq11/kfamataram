@@ -182,8 +182,6 @@ class _UserLoginState extends State<UserLogin> {
                                                                               'username']
                                                                           .toString(),
                                                                   style: TextStyle(
-                                                                      fontSize:
-                                                                          17.0,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w700,

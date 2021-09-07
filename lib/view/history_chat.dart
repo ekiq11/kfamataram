@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:kf_online/modals/data_api.dart';
 import 'package:kf_online/modals/detail.dart';
@@ -97,79 +99,103 @@ class _HistoryChatState extends State<HistoryChat> {
                       ))
                 ],
               )),
-          body: Container(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: RefreshIndicator(
-                onRefresh: _refresh,
-                key: _onRefresh,
-                child: ListView.builder(
-                  itemCount: _historyChat == null ? 0 : _historyChat.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                        child: InkWell(
-                      onTap: () async {
-                        await http.post(
-                          BaseUrl.readMess +
-                              'from=' +
-                              _historyChat[index].userFrom +
-                              '&to=' +
-                              _historyChat[index].userTo,
-                        );
-                        print(
-                          BaseUrl.readMess +
-                              'from=' +
-                              _historyChat[index].userFrom +
-                              '&to=' +
-                              _historyChat[index].userTo,
-                        );
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailChat(
-                              user: Chat(
-                                  _historyChat[index].userFrom,
-                                  _historyChat[index].userTo,
-                                  _historyChat[index].newMessage),
-                              userTo: Chat(
-                                _historyChat[index].userFrom.toString(),
-                                _historyChat[index].userTo.toString(),
-                                _historyChat[index].newMessage.toString(),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(1.0),
-                        child: username != _historyChat[index].userFrom
-                            ? ListTile(
-                                leading: Icon(Icons.chat_bubble_outlined,
-                                    color: Colors.orange[300], size: 30.0),
-                                title: Text(
+          body: StreamBuilder<Object>(
+              stream: _stream(),
+              builder: (context, snapshot) {
+                return Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: RefreshIndicator(
+                      onRefresh: _refresh,
+                      key: _onRefresh,
+                      child: ListView.builder(
+                        itemCount:
+                            _historyChat == null ? 0 : _historyChat.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                              child: InkWell(
+                            onTap: () async {
+                              await http.post(
+                                BaseUrl.readMess +
+                                    'from=' +
                                     _historyChat[index].userFrom +
-                                        " (" +
-                                        _historyChat[index].newMessage +
-                                        " Pesan Baru)",
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.w500)),
-                              )
-                            : Text("Refresh",
-                                style: TextStyle(
-                                  fontSize: 0.0,
-                                )),
+                                    '&to=' +
+                                    _historyChat[index].userTo,
+                              );
+                              print(
+                                BaseUrl.readMess +
+                                    'from=' +
+                                    _historyChat[index].userFrom +
+                                    '&to=' +
+                                    _historyChat[index].userTo,
+                              );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailChat(
+                                    user: Chat(
+                                        _historyChat[index].userFrom,
+                                        _historyChat[index].userTo,
+                                        _historyChat[index].newMessage),
+                                    userTo: Chat(
+                                      _historyChat[index].userFrom.toString(),
+                                      _historyChat[index].userTo.toString(),
+                                      _historyChat[index].newMessage.toString(),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(1.0),
+                              child: username != _historyChat[index].userFrom
+                                  ? ListTile(
+                                      leading: Icon(Icons.chat_bubble_outlined,
+                                          color: Colors.orange[300],
+                                          size: 30.0),
+                                      title: Text(
+                                          _historyChat[index].userFrom +
+                                              " (" +
+                                              _historyChat[index].newMessage +
+                                              " Pesan Baru)",
+                                          textAlign: TextAlign.right,
+                                          style: TextStyle(
+                                              fontSize: 18.0,
+                                              fontWeight: FontWeight.w500)),
+                                    )
+                                  : Text("Refresh",
+                                      style: TextStyle(
+                                        fontSize: 0.0,
+                                      )),
+                            ),
+                          ));
+                        },
                       ),
-                    ));
-                  },
-                ),
-              ),
-            ),
-          ),
+                    ),
+                  ),
+                );
+              }),
         ),
       ),
     );
+  }
+
+  Stream<Future<List<dynamic>>> _stream() {
+    Duration interval = Duration(seconds: 1);
+    Stream<Future<List<dynamic>>> stream =
+        Stream<Future<List<dynamic>>>.periodic(interval, _data);
+    return stream;
+  }
+
+  Future<List<dynamic>> _data(int value) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var res = await http.post(
+        BaseUrl.historyChat + preferences.getString("username"),
+        body: {});
+    var jsonx = json.decode(res.body);
+    print(BaseUrl.historyChat + preferences.getString("username"));
+    return jsonx;
   }
 }
 

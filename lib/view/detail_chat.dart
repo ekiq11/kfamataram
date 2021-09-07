@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -147,6 +148,8 @@ class _DetailChatState extends State<DetailChat> {
     getPref();
   }
 
+  ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -245,8 +248,13 @@ class _DetailChatState extends State<DetailChat> {
                             child: ListView.builder(
                               primary: false,
                               shrinkWrap: true,
-                              itemCount: lst.length,
+                              controller: _scrollController,
+                              itemCount: lst.length + 1,
                               itemBuilder: (context, index) {
+                                if (index == lst.length) {
+                                  return Container(height: 70.0);
+                                }
+
                                 var username = lst[index]['user'];
                                 var image = lst[index]['image'];
                                 var mess = lst[index]['content'].toString();
@@ -480,6 +488,14 @@ class _DetailChatState extends State<DetailChat> {
                                       padding:
                                           const EdgeInsets.only(right: 15.0),
                                       child: TextField(
+                                        onTap: () {
+                                          _scrollController.animateTo(
+                                              _scrollController
+                                                  .position.maxScrollExtent,
+                                              duration:
+                                                  Duration(milliseconds: 300),
+                                              curve: Curves.easeOut);
+                                        },
                                         controller: _content,
                                         decoration: InputDecoration(
                                             hintText: "Tulis Pesan...",
@@ -511,16 +527,31 @@ class _DetailChatState extends State<DetailChat> {
                               onPressed: () async {
                                 if (_content.text != "" && _imageFile != null) {
                                   await _kirimpesan();
+                                  _scrollController.animateTo(
+                                      _scrollController
+                                          .position.maxScrollExtent,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.easeOut);
                                   _content.text = "";
                                   _imageFile = null;
                                 } else if (_content.text != "" &&
                                     _imageFile == null) {
                                   await _kirimText();
+                                  _scrollController.animateTo(
+                                      _scrollController
+                                          .position.maxScrollExtent,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.easeOut);
                                   _content.text = "";
                                   _imageFile = null;
                                 } else if (_content.text == "" &&
                                     _imageFile != null) {
                                   await _kirimGambar();
+                                  _scrollController.animateTo(
+                                      _scrollController
+                                          .position.maxScrollExtent,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.easeOut);
                                   _content.text = "";
                                   _imageFile = null;
                                 }
