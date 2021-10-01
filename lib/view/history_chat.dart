@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:kf_online/modals/data_api.dart';
 import 'package:kf_online/modals/detail.dart';

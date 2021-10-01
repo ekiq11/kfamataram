@@ -89,9 +89,9 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.9,
+            height: MediaQuery.of(context).size.height * 1,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
+              padding: const EdgeInsets.only(bottom: 15.0),
               child: Column(
                 children: <Widget>[
                   Center(

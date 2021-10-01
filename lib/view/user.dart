@@ -139,7 +139,7 @@ class _UserLoginState extends State<UserLogin> {
                                               padding: const EdgeInsets.only(
                                                   left: 8.0),
                                               child: new Image.network(
-                                                  'https://wisatakuapps.com/kf_api/kfonline/image/' +
+                                                  'https://aksestryout.com/kfonline/akses/image/' +
                                                       lst[index]['image']
                                                           .toString()),
                                             ),
